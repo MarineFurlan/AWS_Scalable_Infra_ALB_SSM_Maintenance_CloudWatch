@@ -1,0 +1,13 @@
+variable "alb_arn_suffix" {}
+variable "alb_sg_id" {}
+variable "ami" {}
+variable "desired_capacity" {}
+variable "instance_profile_name" {}
+variable "instance_type" {}
+variable "min_capacity" {}
+variable "max_capacity" {}
+variable "name" {}
+variable "private_subnets_ids" {}
+variable "tg_arn" {}
+variable "tg_arn_suffix" {}
+variable "vpc_id" {}
