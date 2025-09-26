@@ -2,7 +2,7 @@
 # AWS Scalable Infra : ALB + SSM Maintenance + CloudWatch   
  
 ## 1. Introduction 
-   
+<a name="my-custom-anchor-point"></a>   
 Ce projet présente une architecture scalable, sécurisée et monitorée sur AWS.      
 Il s'agit de déployer une application web derrière un Application Load Balancer (ALB) dans un VPC privé, avec un Auto Scaling Group d’instances EC2.   
 La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM), sans accès SSH direct, et la supervision est centralisée avec CloudWatch (métriques et alertes).   
@@ -223,6 +223,8 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 - Ajouter un WAF (Web Application Firewall) pour renforcer la sécurité.
 - Configurer l’ALB en HTTPS avec un certificat ACM.
 - Étendre le monitoring (logs applicatifs, métriques supplémentaires).   
+
+[A link to that custom anchor](#my-custom-anchor-point)
 
 > [!NOTE]
 > 8. Conclusion
