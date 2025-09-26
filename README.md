@@ -61,9 +61,11 @@
 
  > [!NOTE]
 > 6. Alerts & Monitoring
-> - Règles de déclenchement de l’alarme Target_4XXCount
-> - Exemple d’alerte mail reçu
-> - Possibilité d’extension (5XX errors, latency, etc.)
+> - Alarme principale : Target_4XXCount déclenche une notification email via SNS si un seuil est dépassé.
+> - Extensions possibles :   
+> > - Ajout d’alertes sur les 5XX errors.   
+> > - Suivi de la latence des requêtes.   
+> > - Création de dashboards personnalisés dans CloudWatch.   
 
 > [!NOTE]
 > 7. Improvements & Next Steps
