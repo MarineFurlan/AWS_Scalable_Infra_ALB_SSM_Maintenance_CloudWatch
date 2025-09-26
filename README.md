@@ -1,8 +1,6 @@
 
- # AWS Scalable Infra : ALB + SSM Maintenance + CloudWatch
- \
- \
- \
+# AWS Scalable Infra : ALB + SSM Maintenance + CloudWatch   
+ 
 ## 1. Introduction 
    
 Ce projet présente une architecture scalable, sécurisée et monitorée sur AWS.      
@@ -15,6 +13,51 @@ La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM),
       
 <ins>Composants principaux :</ins>      
 - ALB (Application Load Balancer) : routage du trafic HTTP/HTTPS   
+```terraform
+resource "aws_lb" "this" {
+  name               = "${var.name}-alb"
+  subnets            = var.public_subnets_ids
+  internal           = false
+  load_balancer_type = "application"
+  security_groups = [aws_security_group.alb.id]
+
+  tags = { Name = "${var.name}-alb-tg" }
+}
+```
+
+```terraform
+resource "aws_lb_target_group" "alb" {
+  name     = "${var.name}-tg"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
+
+  health_check {
+    path                = "/"
+    interval            = 10
+    timeout             = 5
+    unhealthy_threshold = 2
+    healthy_threshold   = 2
+    matcher             = "200-399"
+  }
+
+  deregistration_delay = 60
+}
+```
+
+```terraform
+resource "aws_lb_listener" "alb" {
+  load_balancer_arn = aws_lb.this.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.alb.arn
+  }
+}
+```
+   
 - EC2 Auto Scaling Group : ajustement automatique du nombre d’instances selon la charge.   
 - Private Subnets : instances isolées du trafic direct Internet.   
 - VPC Endpoints : connectivité privée pour accéder à S3 (bootstrap) et SSM (maintenance).   
