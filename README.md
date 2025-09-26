@@ -88,7 +88,7 @@ resource "aws_vpc_endpoint" "ssm" {
 }
 ```
    
-- CloudWatch Monitoring : suivi des métriques et configuration d’alarmes (erreurs 4XX).
+:open_file_folder:[CloudWatch Monitoring](./modules/cloudwatch/main.tf) : suivi des métriques et configuration d’alarmes (erreurs 4XX).
 
 
 ## 3. Features
