@@ -249,7 +249,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 
 9. References
 <a name="#9-references"></a>   
-[Application Load Balancer – AWS Docs](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html)  
-[Auto Scaling Groups – AWS Docs](https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-groups.html)  
-[AWS Systems Manager (SSM)](https://docs.aws.amazon.com/systems-manager/)  
-[Amazon CloudWatch Monitoring](https://docs.aws.amazon.com/cloudwatch/)  
+:link:[Application Load Balancer – AWS Docs](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html)  
+:link:[Auto Scaling Groups – AWS Docs](https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-groups.html)  
+:link:[AWS Systems Manager (SSM)](https://docs.aws.amazon.com/systems-manager/)  
+:link:[Amazon CloudWatch Monitoring](https://docs.aws.amazon.com/cloudwatch/)  
