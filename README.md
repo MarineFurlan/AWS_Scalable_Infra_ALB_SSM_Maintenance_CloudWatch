@@ -34,6 +34,9 @@ La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM),
 ### Terraform
 &emsp;&emsp;L'utilisation d'Infrastructure as Code permet de versionner et reproduire facilement l’environnement, créer des modules réutilisables, déployer de manière automatisée en respectant les bonnes pratiques cloud et détruire l'infrastructure en une seule commande lorsqu'elle n'est plus nécessaire afin de respecter un budget.    
 
+### 2 subnets privés pour l’ASG 
+&emsp;&emsp;Ce choix permet de garantir la haute disponibilité et la résilience de l’application en cas de panne d’une AZ. Cela s’aligne sur les bonnes pratiques AWS pour les architectures critiques.
+
 ### VPC Endpoint S3 plutôt qu’une NAT Gateway (coût et besoin limité d’accès Internet). 
 &emsp;&emsp;Les instances EC2 sont déployées dans des subnets privés et n’ont pas besoin d’un accès Internet permanent.    
 Plutôt que de créer une NAT Gateway (qui génère des coûts supplémentaires), un VPC Endpoint S3 a été utilisé pour permettre le bootstrap et l’accès aux artefacts stockés dans S3 de manière sécurisée et privée.  
@@ -170,7 +173,8 @@ resource "aws_vpc_endpoint" "ssm" {
 
 ## 4. Features
 <a name="#4-features"></a>    
-- **Scalabilité** : auto scaling des instances EC2 en fonction des besoins.     
+- **Scalabilité** : auto scaling des instances EC2 en fonction des besoins.
+- **Haute disponibilité** : Les instances de l’ASG sont déployées sur deux subnets privés dans des Availability Zones différentes, assurant la résilience et la continuité du service. 
 - **Sécurité** : aucune exposition SSH, maintenance uniquement via SSM Session Manager.   
 - **Monitoring** : alarme CloudWatch pour erreurs 4XX.
 - **Reproductibilité et automatisation** : déploiement automatisé et reproductible via Terraform.   
