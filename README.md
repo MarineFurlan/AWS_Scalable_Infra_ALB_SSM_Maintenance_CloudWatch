@@ -81,5 +81,7 @@
 
 > [!NOTE]
 > 9. References
-> - Liens vers la doc AWS (ALB, ASG, SSM, CloudWatch)
-> - Articles/tutos utiles
+> > Application Load Balancer – AWS Docs
+> > Auto Scaling Groups – AWS Docs
+> > AWS Systems Manager (SSM)
+> > Amazon CloudWatch Monitoring
