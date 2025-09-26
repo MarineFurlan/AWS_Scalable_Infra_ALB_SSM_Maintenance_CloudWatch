@@ -1,77 +1,73 @@
 
  # AWS Scalable Infra : ALB + SSM Maintenance + CloudWatch
-
  \
  \
  \
+<ins>**1. Introduction**</ins>   
+   
+Ce projet présente une architecture scalable, sécurisée et monitorée sur AWS.      
+Il s'agit de déployer une application web derrière un Application Load Balancer (ALB) dans un VPC privé, avec un Auto Scaling Group d’instances EC2.   
+La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM), sans accès SSH direct, et la supervision est centralisée avec CloudWatch (métriques et alertes).   
+   
+<ins>**2. Architecture Overview**</ins>   
+   
+<img width="2028" height="1049" alt="WebApp_EmailAlarm_SSMConnect drawio(1)" src="https://github.com/user-attachments/assets/7dbff49e-2482-492d-9902-2619b60d88c5" />
+      
+<ins>Composants principaux :</ins>      
+- ALB (Application Load Balancer) : routage du trafic HTTP/HTTPS   
+- EC2 Auto Scaling Group : ajustement automatique du nombre d’instances selon la charge.   
+- Private Subnets : instances isolées du trafic direct Internet.   
+- VPC Endpoints : connectivité privée pour accéder à S3 (bootstrap) et SSM (maintenance).   
+- CloudWatch Monitoring : suivi des métriques et configuration d’alarmes (erreurs 4XX).
 
- > [!NOTE]
-> 1. Introduction
-> - Contexte du projet (objectif, problématique adressée)
-> > Ce projet présente une architecture scalable, sécurisée et monitorée sur AWS.      
-> - Description générale de l’architecture (scalable, sécurisée, monitorée)
-> > Il s'agit de déployer une application web derrière un Application Load Balancer (ALB) dans un VPC privé, avec un Auto Scaling Group d’instances EC2.   
-> > La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM), sans accès SSH direct, et la supervision est centralisée avec CloudWatch (métriques et alertes).   
 
- > [!NOTE]
-> 2. Architecture Overview 
-> - Schéma d’architecture (diagramme AWS)
-> <img width="2028" height="1049" alt="WebApp_EmailAlarm_SSMConnect drawio(1)" src="https://github.com/user-attachments/assets/7dbff49e-2482-492d-9902-2619b60d88c5" />
->    
-> - Composants principaux :
-> > - ALB (Application Load Balancer) : routage du trafic HTTP/HTTPS   
-> > - EC2 Auto Scaling Group : ajustement automatique du nombre d’instances selon la charge.   
-> > - Private Subnets : instances isolées du trafic direct Internet.   
-> > - VPC Endpoints : connectivité privée pour accéder à S3 (bootstrap) et SSM (maintenance).   
-> > - CloudWatch Monitoring : suivi des métriques et configuration d’alarmes (erreurs 4XX).
+<ins>**3. Features**</ins>   
+- Scalabilité : auto scaling des instances EC2 en fonction des besoins.   
+- Sécurité : aucune exposition SSH, maintenance uniquement via SSM Session Manager.   
+- Monitoring : alarme CloudWatch pour erreurs 4XX.   
+- Optimisation : instances privées avec accès S3 via un vpc endpoint pour charger les fichiers de configuration au boot.
 
- > [!NOTE]
-> 3. Features 
-> > - Scalabilité : auto scaling des instances EC2 en fonction des besoins.   
-> > - Sécurité : aucune exposition SSH, maintenance uniquement via SSM Session Manager.   
-> > - Monitoring : alarme CloudWatch pour erreurs 4XX.   
-> > - Optimisation : instances privées avec accès S3 via un vpc endpoint pour charger les fichiers de configuration au boot.
 
- > [!NOTE]
-> 4. Deployment Steps 
-> Prérequis
-> > Compte AWS actif.   
-> > AWS CLI configurée.   
-> > Terraform   
-> >    
-> Étapes de déploiement :
-> > 1. Création du VPC avec subnets publics et privés.
-> > 2. Mise en place des VPC endpoints SSM et S3.
-> > 3. Mettre en place l’Application Load Balancer (ALB).
-> > 4. Déployer un Auto Scaling Group d’instances EC2 dans les subnets privés.
-> > 5. Configurer CloudWatch Alarm sur Target_4XXCount.
-> > 6. Vérifier le fonctionnement :
-> > > - Accès applicatif via ALB.
-> > > - Connexion maintenance via SSM.
-> > > - Déclenchement de l’alarme en cas d’erreurs 4XX.
+<ins>**4. Deployment Steps**</ins> 
+   
+<ins>Prérequis</ins> 
+   
+Compte AWS actif.   
+AWS CLI configurée.   
+Terraform   
+  
+<ins>Étapes de déploiement :</ins>   
+1. Création du VPC avec subnets publics et privés.
+2. Mise en place des VPC endpoints SSM et S3.
+3. Mettre en place l’Application Load Balancer (ALB).
+4. Déployer un Auto Scaling Group d’instances EC2 dans les subnets privés.
+5. Configurer CloudWatch Alarm sur Target_4XXCount.
+6. Vérifier le fonctionnement :
+- Accès applicatif via ALB.
+- Connexion maintenance via SSM.
+- Déclenchement de l’alarme en cas d’erreurs 4XX.
 
- > [!NOTE]
-> 5. Usage & Maintenance 
-> - Accès aux instances : utiliser AWS Systems Manager → Session Manager (aucun besoin de clé SSH).
-> - Monitoring : suivre les métriques et alarmes dans CloudWatch Dashboard.
-> - Bonnes pratiques :
-> > - IAM avec le principe de least privilege.
-> > - Tagging des ressources pour une meilleure gestion.
-> > - Logs centralisés (CloudWatch Logs).   
+<ins>**5. Usage & Maintenance**</ins>    
+- Accès aux instances : utiliser AWS Systems Manager → Session Manager (aucun besoin de clé SSH).
+- Monitoring : suivre les métriques et alarmes dans CloudWatch Dashboard.
+- Bonnes pratiques :
+- IAM avec le principe de least privilege.
+- Tagging des ressources pour une meilleure gestion.
+- Logs centralisés (CloudWatch Logs).   
 
- > [!NOTE]
-> 6. Alerts & Monitoring
-> - Alarme principale : Target_4XXCount déclenche une notification email via SNS si un seuil est dépassé.
-> - Extensions possibles :   
-> > - Ajout d’alertes sur les 5XX errors.   
-> > - Suivi de la latence des requêtes.   
-> > - Création de dashboards personnalisés dans CloudWatch.   
 
-> [!NOTE]
-> 7. Improvements & Next Steps
-> > - Ajouter un WAF (Web Application Firewall) pour renforcer la sécurité.
-> > - Configurer l’ALB en HTTPS avec un certificat ACM.
-> > - Étendre le monitoring (logs applicatifs, métriques supplémentaires).   
+<ins>**6. Alerts & Monitoring**</ins>   
+- Alarme principale : Target_4XXCount déclenche une notification email via SNS si un seuil est dépassé.
+- Extensions possibles :   
+- Ajout d’alertes sur les 5XX errors.   
+- Suivi de la latence des requêtes.   
+- Création de dashboards personnalisés dans CloudWatch.   
+
+
+<ins>**7. Improvements & Next Steps**</ins>   
+- Ajouter un WAF (Web Application Firewall) pour renforcer la sécurité.
+- Configurer l’ALB en HTTPS avec un certificat ACM.
+- Étendre le monitoring (logs applicatifs, métriques supplémentaires).   
 
 > [!NOTE]
 > 8. Conclusion
