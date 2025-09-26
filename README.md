@@ -57,7 +57,8 @@ resource "aws_lb_listener" "alb" {
   }
 }
 ```
-   
+[Voir le module complet ALB](https://github.com/MarineFurlan/AWS_Scalable_Infra_ALB_SSM_Maintenance_CloudWatch/master/modules/alb/main.tf)
+  
 - EC2 Auto Scaling Group : ajustement automatique du nombre d’instances selon la charge.   
 - Private Subnets : instances isolées du trafic direct Internet.   
 - VPC Endpoints : connectivité privée pour accéder à S3 (bootstrap) et SSM (maintenance).
