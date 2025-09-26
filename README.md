@@ -83,7 +83,7 @@ resource "aws_lb_listener" "alb" {
    
 :open_file_folder:[VPC Endpoints](./modules/vpc_endpoints/main.tf) : connectivité privée pour accéder à S3 (bootstrap) et SSM (maintenance).   
 > [!NOTE]
-> Pour comprendre le choix d’utiliser un VPC Endpoint pour le bootstrap plutôt qu’une NAT Gateway, voir la section (voir [Design Decisions](#2-design-decisions)). 
+> Pour comprendre le choix d’utiliser ces deux VPC endpoints plutôt qu'une NAT Gateway ou une connexion en SSH, voir la section (voir [Design Decisions](#2-design-decisions)). 
    
 ```terraform
 resource "aws_vpc_endpoint" "s3" {
