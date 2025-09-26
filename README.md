@@ -30,18 +30,18 @@ La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM),
 <a name="#2-design-decisions"></a>   
 ### VPC Endpoint S3 plutôt qu’une NAT Gateway (coût et besoin limité d’accès Internet). 
 &emsp;&emsp;Les instances EC2 sont déployées dans des subnets privés et n’ont pas besoin d’un accès Internet permanent.    
-Plutôt que de créer une NAT Gateway (qui génère des coûts supplémentaires), un **VPC Endpoint S3** a été utilisé pour permettre le bootstrap et l’accès aux artefacts stockés dans S3 de manière sécurisée et privée.  
-Cette solution est à la fois **économique et conforme aux bonnes pratiques de sécurité** AWS pour les environnements privés.  
+Plutôt que de créer une NAT Gateway (qui génère des coûts supplémentaires), un VPC Endpoint S3 a été utilisé pour permettre le bootstrap et l’accès aux artefacts stockés dans S3 de manière sécurisée et privée.  
+Cette solution est à la fois économique et conforme aux bonnes pratiques de sécurité AWS pour les environnements privés.  
   
 ### Session Manager pour ajouter de la securité en fermant le port SSH. 
 &emsp;&emsp;Pour limiter l’exposition des instances, le port SSH 22 reste fermé.  
-L’accès est géré via **AWS Systems Manager Session Manager**, ce qui permet d’effectuer la maintenance et le debug directement depuis la console ou l’interface CLI, sans ouvrir de ports réseau.  
+L’accès est géré via AWS Systems Manager Session Manager, ce qui permet d’effectuer la maintenance et le debug directement depuis la console ou l’interface CLI, sans ouvrir de ports réseau.  
 Ce choix renforce la sécurité et simplifie la gestion des accès tout en restant compatible avec les meilleures pratiques de gouvernance AWS.  
   
 ### Alarme CloudWatch unique pour simplifier la démonstration.
 &emsp;&emsp;Pour ce projet, une seule alarme CloudWatch a été créée sur le compteur d’erreurs 4XX.  
-L’objectif est de **démontrer le mécanisme de monitoring et de notification** sans complexifier le déploiement ni augmenter les coûts.  
-Cette approche permet de montrer la logique de création et de gestion des alarmes, tout en restant **extensible et reproductible** pour d’autres métriques ou besoins futurs. 
+L’objectif est de démontrer le mécanisme de monitoring et de notification sans complexifier le déploiement ni augmenter les coûts.  
+Cette approche permet de montrer la logique de création et de gestion des alarmes, tout en restant extensible et reproductible pour d’autres métriques ou besoins futurs. 
 <br/>
 <br/>
 <br/>
@@ -295,10 +295,10 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 <a name="#6-usage--maintenance"></a>
 - Accès aux instances : utiliser AWS Systems Manager → Session Manager (aucun besoin de clé SSH).
 - Monitoring : suivre les métriques et alarmes dans CloudWatch Dashboard.
-- Bonnes pratiques :
-- IAM avec le principe de least privilege.
-- Tagging des ressources pour une meilleure gestion.
-- Logs centralisés (CloudWatch Logs).   
+- Bonnes pratiques :  
+&emsp;&emsp;- IAM avec le principe de least privilege.  
+&emsp;&emsp;- Tagging des ressources pour une meilleure gestion.  
+&emsp;&emsp;- Logs centralisés (CloudWatch Logs).     
 <br/>
 <br/>
 <br/>
