@@ -19,11 +19,11 @@
 > <img width="2028" height="1049" alt="WebApp_EmailAlarm_SSMConnect drawio(1)" src="https://github.com/user-attachments/assets/7dbff49e-2482-492d-9902-2619b60d88c5" />
 >    
 > - Composants principaux :
-> - ALB (Application Load Balancer) : routage du trafic HTTP/HTTPS
-> - EC2 Auto Scaling Group : haute disponibilité et scalabilité
-> - Private Subnets : sécurité réseau renforcée
-> - VPC Endpoints (SSM, S3, etc.) : connectivité privée et sécurisée
-> - CloudWatch Monitoring : métriques et alertes (erreurs 4XX, etc.)
+> > - ALB (Application Load Balancer) : routage du trafic HTTP/HTTPS   
+> > - EC2 Auto Scaling Group : ajustement automatique du nombre d’instances selon la charge.   
+> > - Private Subnets : instances isolées du trafic direct Internet.   
+> > - VPC Endpoints : connectivité privée pour accéder à S3 (bootstrap) et SSM (maintenance).   
+> > - CloudWatch Monitoring : suivi des métriques et configuration d’alarmes (erreurs 4XX).
 
  > [!NOTE]
 > 3. Features 
