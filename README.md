@@ -11,8 +11,9 @@ La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM),
    
 <img width="2028" height="1049" alt="WebApp_EmailAlarm_SSMConnect drawio(1)" src="https://github.com/user-attachments/assets/7dbff49e-2482-492d-9902-2619b60d88c5" />
       
-<ins>Composants principaux :</ins>      
-- ALB (Application Load Balancer) : routage du trafic HTTP/HTTPS   
+<ins>Composants principaux :</ins>  
+   
+:open_file_folder:[ALB (Application Load Balancer)](./modules/alb/main.tf) : routage du trafic HTTP/HTTPS   
 ```terraform
 resource "aws_lb" "this" {
   name               = "${var.name}-alb"
@@ -57,7 +58,6 @@ resource "aws_lb_listener" "alb" {
   }
 }
 ```
-[Voir le module complet ALB](https://github.com/MarineFurlan/AWS_Scalable_Infra_ALB_SSM_Maintenance_CloudWatch/master/modules/alb/main.tf)
   
 - EC2 Auto Scaling Group : ajustement automatique du nombre d’instances selon la charge.   
 - Private Subnets : instances isolées du trafic direct Internet.   
