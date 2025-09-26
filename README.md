@@ -42,7 +42,7 @@ Cette approche permet de montrer la logique de création et de gestion des alarm
       
 ### Composants principaux : 
    
-:open_file_folder:[ALB (Application Load Balancer)](https://github.com/MarineFurlan/AWS_Scalable_Infra_ALB_SSM_Maintenance_CloudWatch/blob/490cf479403b9aecde0ec6d48c4ead088536b310/modules/alb/main.tf#L23-L60) : routage du trafic HTTP/HTTPS
+:open_file_folder:[ALB (Application Load Balancer)](./modules/alb/main.tf) : routage du trafic HTTP/HTTPS
 <details>
   
 <summary>See ALB code</summary>
