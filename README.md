@@ -60,7 +60,32 @@ resource "aws_lb_listener" "alb" {
    
 - EC2 Auto Scaling Group : ajustement automatique du nombre d’instances selon la charge.   
 - Private Subnets : instances isolées du trafic direct Internet.   
-- VPC Endpoints : connectivité privée pour accéder à S3 (bootstrap) et SSM (maintenance).   
+- VPC Endpoints : connectivité privée pour accéder à S3 (bootstrap) et SSM (maintenance).
+```terraform
+resource "aws_vpc_endpoint" "s3" {
+  service_name      = "com.amazonaws.${var.region}.s3"
+  vpc_endpoint_type = "Gateway"
+  vpc_id            = var.vpc_id
+
+  route_table_ids = var.private_rt_id
+
+  tags = { Name = "${var.name}-s3-endpoint" }
+}
+```
+
+```terraform
+resource "aws_vpc_endpoint" "ssm" {
+  service_name        = "com.amazonaws.${var.region}.ssm"
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = var.vpc_id
+  subnet_ids          = var.private_subnets_ids
+  security_group_ids = [aws_security_group.endpoints.id]
+  private_dns_enabled = true
+
+  tags = { Name = "${var.name}-ssm-endpoint" }
+}
+```
+   
 - CloudWatch Monitoring : suivi des métriques et configuration d’alarmes (erreurs 4XX).
 
 
