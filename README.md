@@ -69,10 +69,9 @@
 
 > [!NOTE]
 > 7. Improvements & Next Steps
-> - Intégration CI/CD (CodePipeline, CodeDeploy)
-> - Ajout de WAF (Web Application Firewall)
-> - Mise en place d’ALB HTTPS + ACM Certificates
-> - Logging centralisé (CloudWatch Logs, S3, etc.)
+> > - Ajouter un WAF (Web Application Firewall) pour renforcer la sécurité.
+> > - Configurer l’ALB en HTTPS avec un certificat ACM.
+> > - Étendre le monitoring (logs applicatifs, métriques supplémentaires).   
 
 > [!NOTE]
 > 8. Conclusion
