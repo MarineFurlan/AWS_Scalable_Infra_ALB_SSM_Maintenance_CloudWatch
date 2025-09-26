@@ -276,7 +276,7 @@ resource "aws_launch_template" "webApp" {
 ```
 </details>
 
-6. Configurer [CloudWatch Alarm](./modules/cloudwatch/main.tf) sur Target_4XXCount.
+5. Configurer [CloudWatch Alarm](./modules/cloudwatch/main.tf) sur Target_4XXCount.
 <details>
   
 <summary>See alarm code</summary>
@@ -298,14 +298,14 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 ```
 </details>
 
-8. Lancer la commande *terraform init* pour initialiser les modules. Puis, *terraform plan* pour vérifier ce qui va être créé et enfin *terraform apply* pour déployer l'infrastructure.
+6. Lancer la commande *terraform init* pour initialiser les modules. Puis, *terraform plan* pour vérifier ce qui va être créé et enfin *terraform apply* pour déployer l'infrastructure.
    
-10. Vérifier le fonctionnement :
+7. Vérifier le fonctionnement :
 - Accès applicatif via ALB.
 - Connexion maintenance via SSM.
 - Déclenchement de l’alarme en cas d’erreurs 4XX.
 
-11. Si besoin, détruire l'infrastructure avec la commande "*terraform destroy*.
+8. Si besoin, détruire l'infrastructure avec la commande "*terraform destroy*.
 <br/>
 <br/>
 
