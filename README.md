@@ -11,7 +11,7 @@ La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM),
    
 <img width="2028" height="1049" alt="WebApp_EmailAlarm_SSMConnect drawio(1)" src="https://github.com/user-attachments/assets/7dbff49e-2482-492d-9902-2619b60d88c5" />
       
-<ins>Composants principaux :</ins>  
+### Composants principaux : 
    
 :open_file_folder:[ALB (Application Load Balancer)](./modules/alb/main.tf) : routage du trafic HTTP/HTTPS   
 ```terraform
@@ -59,9 +59,10 @@ resource "aws_lb_listener" "alb" {
 }
 ```
   
-- EC2 Auto Scaling Group : ajustement automatique du nombre d’instances selon la charge.   
-- Private Subnets : instances isolées du trafic direct Internet.   
-- VPC Endpoints : connectivité privée pour accéder à S3 (bootstrap) et SSM (maintenance).
+:open_file_folder:[EC2 Auto Scaling Group](./modules/asg/main.tf) : ajustement automatique du nombre d’instances selon la charge.   
+:open_file_folder:[Private Subnets](./modules/vpc/main.tf) : instances isolées du trafic direct Internet.   
+:open_file_folder:[VPC Endpoints](./modules/vpc_endpoints/main.tf) : connectivité privée pour accéder à S3 (bootstrap) et SSM (maintenance).   
+   
 ```terraform
 resource "aws_vpc_endpoint" "s3" {
   service_name      = "com.amazonaws.${var.region}.s3"
