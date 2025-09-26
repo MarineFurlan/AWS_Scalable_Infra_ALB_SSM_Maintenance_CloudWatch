@@ -60,8 +60,11 @@ resource "aws_lb_listener" "alb" {
 ```
   
 :open_file_folder:[EC2 Auto Scaling Group](./modules/asg/main.tf) : ajustement automatique du nombre d’instances selon la charge.   
+   
 :open_file_folder:[Private Subnets](./modules/vpc/main.tf) : instances isolées du trafic direct Internet.   
+   
 :open_file_folder:[VPC Endpoints](./modules/vpc_endpoints/main.tf) : connectivité privée pour accéder à S3 (bootstrap) et SSM (maintenance).   
+   
    
 ```terraform
 resource "aws_vpc_endpoint" "s3" {
@@ -100,17 +103,17 @@ resource "aws_vpc_endpoint" "ssm" {
 
 ## 4. Deployment Steps
    
-<ins>Prérequis</ins> 
+### Prérequis
    
-Compte AWS actif.   
-AWS CLI configurée.   
-Terraform   
+- Compte AWS actif.   
+- AWS CLI configurée.   
+- Terraform   
   
-<ins>Étapes de déploiement :</ins>   
-1. Création du VPC avec subnets publics et privés.
-2. Mise en place des VPC endpoints SSM et S3.
-3. Mettre en place l’Application Load Balancer (ALB).
-4. Déployer un Auto Scaling Group d’instances EC2 dans les subnets privés.
+### Étapes de déploiement :     
+1. Création du [VPC](./modules/vpc/main.tf) avec subnets publics et privés.
+2. Mise en place des [VPC endpoints](./modules/vpc_endpoints/main.tf) SSM et S3.
+3. Mettre en place l’[Application Load Balancer (ALB)](./modules/alb/main.tf).
+4. Déployer un [Auto Scaling Group](./modules/asg/main.tf) d’instances EC2 dans les subnets privés.
 ```terraform
 resource "aws_autoscaling_group" "this" {
   name = "${var.name}-asg"
@@ -177,7 +180,7 @@ resource "aws_launch_template" "webApp" {
 }
 ```
    
-6. Configurer CloudWatch Alarm sur Target_4XXCount.
+6. Configurer [CloudWatch Alarm](./modules/cloudwatch/main.tf) sur Target_4XXCount.
 ```terraform
 resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
   alarm_name          = "${var.name}-ALB-4xx-alarm"
