@@ -3,13 +3,13 @@
  \
  \
  \
-<ins>**1. Introduction**</ins>   
+## 1. Introduction 
    
 Ce projet présente une architecture scalable, sécurisée et monitorée sur AWS.      
 Il s'agit de déployer une application web derrière un Application Load Balancer (ALB) dans un VPC privé, avec un Auto Scaling Group d’instances EC2.   
 La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM), sans accès SSH direct, et la supervision est centralisée avec CloudWatch (métriques et alertes).   
    
-<ins>**2. Architecture Overview**</ins>   
+## 2. Architecture Overview
    
 <img width="2028" height="1049" alt="WebApp_EmailAlarm_SSMConnect drawio(1)" src="https://github.com/user-attachments/assets/7dbff49e-2482-492d-9902-2619b60d88c5" />
       
@@ -21,14 +21,14 @@ La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM),
 - CloudWatch Monitoring : suivi des métriques et configuration d’alarmes (erreurs 4XX).
 
 
-<ins>**3. Features**</ins>   
+## 3. Features
 - Scalabilité : auto scaling des instances EC2 en fonction des besoins.   
 - Sécurité : aucune exposition SSH, maintenance uniquement via SSM Session Manager.   
 - Monitoring : alarme CloudWatch pour erreurs 4XX.   
 - Optimisation : instances privées avec accès S3 via un vpc endpoint pour charger les fichiers de configuration au boot.
 
 
-<ins>**4. Deployment Steps**</ins> 
+## 4. Deployment Steps
    
 <ins>Prérequis</ins> 
    
@@ -47,7 +47,7 @@ Terraform
 - Connexion maintenance via SSM.
 - Déclenchement de l’alarme en cas d’erreurs 4XX.
 
-<ins>**5. Usage & Maintenance**</ins>    
+## 5. Usage & Maintenance
 - Accès aux instances : utiliser AWS Systems Manager → Session Manager (aucun besoin de clé SSH).
 - Monitoring : suivre les métriques et alarmes dans CloudWatch Dashboard.
 - Bonnes pratiques :
@@ -56,7 +56,7 @@ Terraform
 - Logs centralisés (CloudWatch Logs).   
 
 
-<ins>**6. Alerts & Monitoring**</ins>   
+## 6. Alerts & Monitoring
 - Alarme principale : Target_4XXCount déclenche une notification email via SNS si un seuil est dépassé.
 - Extensions possibles :   
 - Ajout d’alertes sur les 5XX errors.   
@@ -64,7 +64,7 @@ Terraform
 - Création de dashboards personnalisés dans CloudWatch.   
 
 
-<ins>**7. Improvements & Next Steps**</ins>   
+## 7. Improvements & Next Steps
 - Ajouter un WAF (Web Application Firewall) pour renforcer la sécurité.
 - Configurer l’ALB en HTTPS avec un certificat ACM.
 - Étendre le monitoring (logs applicatifs, métriques supplémentaires).   
