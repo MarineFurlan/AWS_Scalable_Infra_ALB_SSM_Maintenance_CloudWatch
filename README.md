@@ -21,17 +21,32 @@ La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM),
    
 ## 2. Design Decisions   
 <a name="#2-design-decisions"></a>   
-- VPC Endpoint S3 plutôt qu’une NAT Gateway (coût et besoin limité d’accès Internet).  
-- Session Manager pour ajouter de la securité en fermant le port SSH.  
-- Alarme CloudWatch unique pour simplifier la démonstration.
+### VPC Endpoint S3 plutôt qu’une NAT Gateway (coût et besoin limité d’accès Internet). 
+  Les instances EC2 sont déployées dans des subnets privés et n’ont pas besoin d’un accès Internet permanent.    
+Plutôt que de créer une NAT Gateway (qui génère des coûts supplémentaires), un **VPC Endpoint S3** a été utilisé pour permettre le bootstrap et l’accès aux artefacts stockés dans S3 de manière sécurisée et privée.  
+Cette solution est à la fois **économique et conforme aux bonnes pratiques de sécurité** AWS pour les environnements privés.  
   
+### Session Manager pour ajouter de la securité en fermant le port SSH. 
+  Pour limiter l’exposition des instances, le port SSH 22 reste fermé.  
+L’accès est géré via **AWS Systems Manager Session Manager**, ce qui permet d’effectuer la maintenance et le debug directement depuis la console ou l’interface CLI, sans ouvrir de ports réseau.  
+Ce choix renforce la sécurité et simplifie la gestion des accès tout en restant compatible avec les meilleures pratiques de gouvernance AWS.  
+  
+### Alarme CloudWatch unique pour simplifier la démonstration.
+  Pour ce projet, une seule alarme CloudWatch a été créée sur le compteur d’erreurs 4XX.  
+L’objectif est de **démontrer le mécanisme de monitoring et de notification** sans complexifier le déploiement ni augmenter les coûts.  
+Cette approche permet de montrer la logique de création et de gestion des alarmes, tout en restant **extensible et reproductible** pour d’autres métriques ou besoins futurs. 
+
 ## 3. Architecture Overview
 <a name="#3-architecture-overview"></a>      
 <img width="2028" height="1049" alt="WebApp_EmailAlarm_SSMConnect drawio(1)" src="https://github.com/user-attachments/assets/7dbff49e-2482-492d-9902-2619b60d88c5" />   
       
 ### Composants principaux : 
    
-:open_file_folder:[ALB (Application Load Balancer)](./modules/alb/main.tf) : routage du trafic HTTP/HTTPS   
+:open_file_folder:[ALB (Application Load Balancer)](./modules/alb/main.tf) : routage du trafic HTTP/HTTPS
+<details>
+  
+<summary>See ALB code</summary>
+  
 ```terraform
 resource "aws_lb" "this" {
   name               = "${var.name}-alb"
@@ -43,6 +58,12 @@ resource "aws_lb" "this" {
   tags = { Name = "${var.name}-alb-tg" }
 }
 ```
+
+</details>
+
+<details>
+  
+<summary>See target group code</summary>
 
 ```terraform
 resource "aws_lb_target_group" "alb" {
@@ -63,6 +84,11 @@ resource "aws_lb_target_group" "alb" {
   deregistration_delay = 60
 }
 ```
+</details>
+
+<details>
+  
+<summary>See listener code</summary>
 
 ```terraform
 resource "aws_lb_listener" "alb" {
@@ -76,7 +102,8 @@ resource "aws_lb_listener" "alb" {
   }
 }
 ```
-  
+ </details> 
+ 
 :open_file_folder:[EC2 Auto Scaling Group](./modules/asg/main.tf) : ajustement automatique du nombre d’instances selon la charge.   
    
 :open_file_folder:[Private Subnets](./modules/vpc/main.tf) : instances isolées du trafic direct Internet.   
@@ -84,7 +111,11 @@ resource "aws_lb_listener" "alb" {
 :open_file_folder:[VPC Endpoints](./modules/vpc_endpoints/main.tf) : connectivité privée pour accéder à S3 (bootstrap) et SSM (maintenance).   
 > [!NOTE]
 > Pour comprendre le choix d’utiliser ces deux VPC endpoints plutôt qu'une NAT Gateway ou une connexion en SSH, voir la section (voir [Design Decisions](#2-design-decisions)). 
-   
+
+<details>
+  
+<summary>See VPC endpoint for s3 code</summary>
+
 ```terraform
 resource "aws_vpc_endpoint" "s3" {
   service_name      = "com.amazonaws.${var.region}.s3"
@@ -96,6 +127,11 @@ resource "aws_vpc_endpoint" "s3" {
   tags = { Name = "${var.name}-s3-endpoint" }
 }
 ```
+</details>
+
+<details>
+  
+<summary>See VPC endpoint for ssm code</summary>
 
 ```terraform
 resource "aws_vpc_endpoint" "ssm" {
@@ -109,7 +145,8 @@ resource "aws_vpc_endpoint" "ssm" {
   tags = { Name = "${var.name}-ssm-endpoint" }
 }
 ```
-   
+</details>
+
 :open_file_folder:[CloudWatch Monitoring](./modules/cloudwatch/main.tf) : suivi des métriques et configuration d’alarmes (erreurs 4XX).
 
 
@@ -134,6 +171,10 @@ resource "aws_vpc_endpoint" "ssm" {
 2. Mise en place des [VPC endpoints](./modules/vpc_endpoints/main.tf) SSM et S3.
 3. Mettre en place l’[Application Load Balancer (ALB)](./modules/alb/main.tf).
 4. Déployer un [Auto Scaling Group](./modules/asg/main.tf) d’instances EC2 dans les subnets privés.
+<details>
+  
+<summary>See asg code</summary>
+
 ```terraform
 resource "aws_autoscaling_group" "this" {
   name = "${var.name}-asg"
@@ -164,6 +205,12 @@ resource "aws_autoscaling_group" "this" {
 
 }
 ```
+</details>
+
+<details>
+  
+<summary>See launch template code</summary>
+
 ```terraform
 
 resource "aws_launch_template" "webApp" {
@@ -199,8 +246,13 @@ resource "aws_launch_template" "webApp" {
   }
 }
 ```
+</details>
    
 6. Configurer [CloudWatch Alarm](./modules/cloudwatch/main.tf) sur Target_4XXCount.
+<details>
+  
+<summary>See alarm code</summary>
+
 ```terraform
 resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
   alarm_name          = "${var.name}-ALB-4xx-alarm"
@@ -216,7 +268,8 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
   alarm_actions = [aws_sns_topic.alerts.arn]
 }
 ```
-   
+</details>
+
 8. Vérifier le fonctionnement :
 - Accès applicatif via ALB.
 - Connexion maintenance via SSM.
@@ -259,6 +312,6 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 <a name="#10-references"></a>   
 :link:[Application Load Balancer – AWS Docs](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html)  
 :link:[Auto Scaling Groups – AWS Docs](https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-groups.html)  
-:link:[PrivateLinks – AWS Docs](https://docs.aws.amazon.com/vpc/latest/privatelink/concepts.html)
+:link:[PrivateLinks – AWS Docs](https://docs.aws.amazon.com/vpc/latest/privatelink/concepts.html)  
 :link:[AWS Systems Manager (SSM)](https://docs.aws.amazon.com/systems-manager/)  
 :link:[Amazon CloudWatch Monitoring](https://docs.aws.amazon.com/cloudwatch/)  
