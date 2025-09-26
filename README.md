@@ -1,5 +1,7 @@
 
 # AWS Scalable Infra : ALB + SSM Maintenance + CloudWatch
+<br/>
+<br/>
 
 ## Sommaire
 - [Introduction](#1-introduction)
@@ -12,29 +14,37 @@
 - [Improvements & Next Steps](#8-improvements--next-steps)
 - [Conclusion](#9-conclusion)
 - [References](#10-references)
-  
+<br/>
+<br/>
+<br/>
+
 ## 1. Introduction 
 <a name="#1-introduction"></a>     
-Ce projet présente une architecture scalable, sécurisée et monitorée sur AWS.         
+&emsp;&emsp;Ce projet présente une architecture scalable, sécurisée et monitorée sur AWS.         
 Il s'agit de déployer une application web derrière un Application Load Balancer (ALB) dans un VPC privé, avec un Auto Scaling Group d’instances EC2.   
-La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM), sans accès SSH direct, et la supervision est centralisée avec CloudWatch (métriques et alertes).   
-   
+La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM), sans accès SSH direct, et la supervision est centralisée avec CloudWatch (métriques et alertes).  
+<br/>
+<br/>
+
 ## 2. Design Decisions   
 <a name="#2-design-decisions"></a>   
 ### VPC Endpoint S3 plutôt qu’une NAT Gateway (coût et besoin limité d’accès Internet). 
-  Les instances EC2 sont déployées dans des subnets privés et n’ont pas besoin d’un accès Internet permanent.    
+&emsp;&emsp;Les instances EC2 sont déployées dans des subnets privés et n’ont pas besoin d’un accès Internet permanent.    
 Plutôt que de créer une NAT Gateway (qui génère des coûts supplémentaires), un **VPC Endpoint S3** a été utilisé pour permettre le bootstrap et l’accès aux artefacts stockés dans S3 de manière sécurisée et privée.  
 Cette solution est à la fois **économique et conforme aux bonnes pratiques de sécurité** AWS pour les environnements privés.  
   
 ### Session Manager pour ajouter de la securité en fermant le port SSH. 
-  Pour limiter l’exposition des instances, le port SSH 22 reste fermé.  
+&emsp;&emsp;Pour limiter l’exposition des instances, le port SSH 22 reste fermé.  
 L’accès est géré via **AWS Systems Manager Session Manager**, ce qui permet d’effectuer la maintenance et le debug directement depuis la console ou l’interface CLI, sans ouvrir de ports réseau.  
 Ce choix renforce la sécurité et simplifie la gestion des accès tout en restant compatible avec les meilleures pratiques de gouvernance AWS.  
   
 ### Alarme CloudWatch unique pour simplifier la démonstration.
-  Pour ce projet, une seule alarme CloudWatch a été créée sur le compteur d’erreurs 4XX.  
+&emsp;&emsp;Pour ce projet, une seule alarme CloudWatch a été créée sur le compteur d’erreurs 4XX.  
 L’objectif est de **démontrer le mécanisme de monitoring et de notification** sans complexifier le déploiement ni augmenter les coûts.  
 Cette approche permet de montrer la logique de création et de gestion des alarmes, tout en restant **extensible et reproductible** pour d’autres métriques ou besoins futurs. 
+<br/>
+<br/>
+<br/>
 
 ## 3. Architecture Overview
 <a name="#3-architecture-overview"></a>      
@@ -148,7 +158,9 @@ resource "aws_vpc_endpoint" "ssm" {
 </details>
 
 :open_file_folder:[CloudWatch Monitoring](./modules/cloudwatch/main.tf) : suivi des métriques et configuration d’alarmes (erreurs 4XX).
-
+<br/>
+<br/>
+<br/>
 
 ## 4. Features
 <a name="#4-features"></a>    
@@ -156,7 +168,9 @@ resource "aws_vpc_endpoint" "ssm" {
 - Sécurité : aucune exposition SSH, maintenance uniquement via SSM Session Manager.   
 - Monitoring : alarme CloudWatch pour erreurs 4XX.   
 - Optimisation : instances privées avec accès S3 via un vpc endpoint pour charger les fichiers de configuration au boot.
-
+<br/>
+<br/>
+<br/>
 
 ## 5. Deployment Steps
 <a name="#5-deployment-steps"></a>   
@@ -247,7 +261,7 @@ resource "aws_launch_template" "webApp" {
 }
 ```
 </details>
-   
+
 6. Configurer [CloudWatch Alarm](./modules/cloudwatch/main.tf) sur Target_4XXCount.
 <details>
   
@@ -274,6 +288,8 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 - Accès applicatif via ALB.
 - Connexion maintenance via SSM.
 - Déclenchement de l’alarme en cas d’erreurs 4XX.
+<br/>
+<br/>
 
 ## 6. Usage & Maintenance
 <a name="#6-usage--maintenance"></a>
@@ -283,7 +299,9 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 - IAM avec le principe de least privilege.
 - Tagging des ressources pour une meilleure gestion.
 - Logs centralisés (CloudWatch Logs).   
-
+<br/>
+<br/>
+<br/>
 
 ## 7. Alerts & Monitoring
 <a name="#7-alerts--monitoring"></a>
@@ -292,21 +310,26 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 - Ajout d’alertes sur les 5XX errors.   
 - Suivi de la latence des requêtes.   
 - Création de dashboards personnalisés dans CloudWatch.   
-
+<br/>
+<br/>
+<br/>
 
 ## 8. Improvements & Next Steps
 <a name="#8-improvements--next-steps"></a>
 - Ajouter un WAF (Web Application Firewall) pour renforcer la sécurité.
 - Configurer l’ALB en HTTPS avec un certificat ACM.
 - Étendre le monitoring (logs applicatifs, métriques supplémentaires).   
-
-
+<br/>
+<br/>
+<br/>
 
 ## 9. Conclusion
 <a name="#9-conclusion"></a>
 - Résumé des points clés (scalabilité, sécurité, monitoring)
 - Valeur du projet pour ton portfolio
-
+<br/>
+<br/>
+<br/>
 
 ## 10. References
 <a name="#10-references"></a>   
