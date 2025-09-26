@@ -176,7 +176,23 @@ resource "aws_launch_template" "webApp" {
 ```
    
 6. Configurer CloudWatch Alarm sur Target_4XXCount.
-7. Vérifier le fonctionnement :
+```terraform
+resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
+  alarm_name          = "${var.name}-ALB-4xx-alarm"
+  alarm_description   = "Alarm when ALB returns too many 4XX responses"
+  metric_name         = "HTTPCode_Target_4XX_Count"
+  namespace           = "AWS/ApplicationELB"
+  evaluation_periods  = 1
+  period              = 60
+  statistic           = "Sum"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  threshold           = 10
+  dimensions = { LoadBalancer = var.alb_arn_suffix }
+  alarm_actions = [aws_sns_topic.alerts.arn]
+}
+```
+   
+8. Vérifier le fonctionnement :
 - Accès applicatif via ALB.
 - Connexion maintenance via SSM.
 - Déclenchement de l’alarme en cas d’erreurs 4XX.
