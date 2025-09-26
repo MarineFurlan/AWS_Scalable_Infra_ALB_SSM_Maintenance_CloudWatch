@@ -31,23 +31,23 @@ La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM),
 
 ## 2. Design Decisions   
 <a name="#2-design-decisions"></a>
-### Terraform
+### <ins>Terraform</ins>
 &emsp;&emsp;L'utilisation d'Infrastructure as Code permet de versionner et reproduire facilement l’environnement, créer des modules réutilisables, déployer de manière automatisée en respectant les bonnes pratiques cloud et détruire l'infrastructure en une seule commande lorsqu'elle n'est plus nécessaire afin de respecter un budget.    
 
-### 2 subnets privés pour l’ASG 
+### <ins>2 subnets privés pour l’ASG</ins>
 &emsp;&emsp;Ce choix permet de garantir la haute disponibilité et la résilience de l’application en cas de panne d’une AZ. Cela s’aligne sur les bonnes pratiques AWS pour les architectures critiques.
 
-### VPC Endpoint S3 plutôt qu’une NAT Gateway (coût et besoin limité d’accès Internet). 
+### <ins>VPC Endpoint S3 plutôt qu’une NAT Gateway (coût et besoin limité d’accès Internet)</ins> 
 &emsp;&emsp;Les instances EC2 sont déployées dans des subnets privés et n’ont pas besoin d’un accès Internet permanent.    
 Plutôt que de créer une NAT Gateway (qui génère des coûts supplémentaires), un VPC Endpoint S3 a été utilisé pour permettre le bootstrap et l’accès aux artefacts stockés dans S3 de manière sécurisée et privée.  
 Cette solution est à la fois économique et conforme aux bonnes pratiques de sécurité AWS pour les environnements privés.  
   
-### Session Manager pour ajouter de la securité en fermant le port SSH. 
+### <ins>Session Manager pour ajouter de la securité en fermant le port SSH</ins>
 &emsp;&emsp;Pour limiter l’exposition des instances, le port SSH 22 reste fermé.  
 L’accès est géré via AWS Systems Manager Session Manager, ce qui permet d’effectuer la maintenance et le debug directement depuis la console ou l’interface CLI, sans ouvrir de ports réseau.  
 Ce choix renforce la sécurité et simplifie la gestion des accès tout en restant compatible avec les meilleures pratiques de gouvernance AWS.  
   
-### Alarme CloudWatch unique pour simplifier la démonstration.
+### <ins>Alarme CloudWatch unique pour simplifier la démonstration</ins>
 &emsp;&emsp;Pour ce projet, une seule alarme CloudWatch a été créée sur le compteur d’erreurs 4XX.  
 L’objectif est de démontrer le mécanisme de monitoring et de notification sans complexifier le déploiement ni augmenter les coûts.  
 Cette approche permet de montrer la logique de création et de gestion des alarmes, tout en restant extensible et reproductible pour d’autres métriques ou besoins futurs. 
