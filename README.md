@@ -185,7 +185,9 @@ resource "aws_vpc_endpoint" "ssm" {
 <br/>
 
 ## 5. Deployment Steps
-<a name="#5-deployment-steps"></a>   
+<a name="#5-deployment-steps"></a>
+&emsp;&emsp;L’infrastructure est déployée avec Terraform, permettant un déploiement rapide, répétable, automatisé et versionné.  
+Voici les étapes principales pour reproduire l’environnement :  
 ### Prérequis
    
 - Compte AWS actif.   
@@ -296,10 +298,14 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 ```
 </details>
 
-8. Vérifier le fonctionnement :
+8. Lancer la commande *terraform init* pour initialiser les modules. Puis, *terraform plan* pour vérifier ce qui va être créé et enfin *terraform apply* pour déployer l'infrastructure.
+   
+10. Vérifier le fonctionnement :
 - Accès applicatif via ALB.
 - Connexion maintenance via SSM.
 - Déclenchement de l’alarme en cas d’erreurs 4XX.
+
+11. Si besoin, détruire l'infrastructure avec la commande "*terraform destroy*.
 <br/>
 <br/>
 
