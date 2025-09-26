@@ -188,13 +188,13 @@ resource "aws_vpc_endpoint" "ssm" {
 <a name="#5-deployment-steps"></a>
 &emsp;&emsp;L’infrastructure est déployée avec Terraform, permettant un déploiement rapide, répétable, automatisé et versionné.  
 Voici les étapes principales pour reproduire l’environnement :  
-### Prérequis
+### <ins>Prérequis</ins>
    
 - Compte AWS actif.   
 - AWS CLI configurée.   
 - Terraform   
   
-### Étapes de déploiement :     
+### <ins>Étapes de déploiement :</ins>     
 1. Création du [VPC](./modules/vpc/main.tf) avec subnets publics et privés.
 2. Mise en place des [VPC endpoints](./modules/vpc_endpoints/main.tf) SSM et S3.
 3. Mettre en place l’[Application Load Balancer (ALB)](./modules/alb/main.tf).
