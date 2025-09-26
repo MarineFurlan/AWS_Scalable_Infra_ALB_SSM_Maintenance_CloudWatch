@@ -241,13 +241,13 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 
 
 
-8. Conclusion
+## 8. Conclusion
 <a name="#8-conclusion"></a>
 - Résumé des points clés (scalabilité, sécurité, monitoring)
 - Valeur du projet pour ton portfolio
 
 
-9. References
+## 9. References
 <a name="#9-references"></a>   
 :link:[Application Load Balancer – AWS Docs](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html)  
 :link:[Auto Scaling Groups – AWS Docs](https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-groups.html)  
