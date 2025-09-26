@@ -1,14 +1,25 @@
 
-# AWS Scalable Infra : ALB + SSM Maintenance + CloudWatch   
- 
+# AWS Scalable Infra : ALB + SSM Maintenance + CloudWatch
+
+## Sommaire
+- [Introduction](#1-introduction)
+- [Architecture Overview](#2-architecture-overview)
+- [Features](#3-features)
+- [Deployment Steps](#4-deployment-steps)
+- [Usage & Maintenance](#5-usage--maintenance)
+- [Alerts & Monitoring](#6-alerts--monitoring)
+- [Improvements & Next Steps](#7-improvements--next-steps)
+- [Conclusion](#8-conclusion)
+- [References](#9-references)
+  
 ## 1. Introduction 
-<a name="my-custom-anchor-point"></a>   
+<a name="#1-introduction"></a>  
 Ce projet présente une architecture scalable, sécurisée et monitorée sur AWS.      
 Il s'agit de déployer une application web derrière un Application Load Balancer (ALB) dans un VPC privé, avec un Auto Scaling Group d’instances EC2.   
 La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM), sans accès SSH direct, et la supervision est centralisée avec CloudWatch (métriques et alertes).   
    
 ## 2. Architecture Overview
-   
+<a name="#2-architecture-overview"></a>  
 <img width="2028" height="1049" alt="WebApp_EmailAlarm_SSMConnect drawio(1)" src="https://github.com/user-attachments/assets/7dbff49e-2482-492d-9902-2619b60d88c5" />
       
 ### Composants principaux : 
@@ -95,6 +106,7 @@ resource "aws_vpc_endpoint" "ssm" {
 
 
 ## 3. Features
+<a name="#3-features"></a>
 - Scalabilité : auto scaling des instances EC2 en fonction des besoins.   
 - Sécurité : aucune exposition SSH, maintenance uniquement via SSM Session Manager.   
 - Monitoring : alarme CloudWatch pour erreurs 4XX.   
@@ -102,7 +114,7 @@ resource "aws_vpc_endpoint" "ssm" {
 
 
 ## 4. Deployment Steps
-   
+<a name="#4-deployment-steps"></a>   
 ### Prérequis
    
 - Compte AWS actif.   
@@ -203,6 +215,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 - Déclenchement de l’alarme en cas d’erreurs 4XX.
 
 ## 5. Usage & Maintenance
+<a name="#5-usage--maintenance"></a>
 - Accès aux instances : utiliser AWS Systems Manager → Session Manager (aucun besoin de clé SSH).
 - Monitoring : suivre les métriques et alarmes dans CloudWatch Dashboard.
 - Bonnes pratiques :
@@ -212,6 +225,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 
 
 ## 6. Alerts & Monitoring
+<a name="#6-alerts--monitoring"></a>
 - Alarme principale : Target_4XXCount déclenche une notification email via SNS si un seuil est dépassé.
 - Extensions possibles :   
 - Ajout d’alertes sur les 5XX errors.   
@@ -220,20 +234,22 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 
 
 ## 7. Improvements & Next Steps
+<a name="#7-improvements--next-steps"></a>
 - Ajouter un WAF (Web Application Firewall) pour renforcer la sécurité.
 - Configurer l’ALB en HTTPS avec un certificat ACM.
 - Étendre le monitoring (logs applicatifs, métriques supplémentaires).   
 
-[A link to that custom anchor](#my-custom-anchor-point)
 
 > [!NOTE]
 > 8. Conclusion
+<a name="#8-conclusion"></a>
 > - Résumé des points clés (scalabilité, sécurité, monitoring)
 > - Valeur du projet pour ton portfolio
 
 
 > [!NOTE]
 > 9. References
+<a name="#9-references"></a>
 > > Application Load Balancer – AWS Docs
 > > Auto Scaling Groups – AWS Docs
 > > AWS Systems Manager (SSM)
