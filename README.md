@@ -34,13 +34,21 @@
 
  > [!NOTE]
 > 4. Deployment Steps 
-> Prérequis (AWS CLI, Terraform/CDK/CloudFormation si utilisé)
+> Prérequis
+> > Compte AWS actif.   
+> > AWS CLI configurée.   
+> > Terraform   
+> >    
 > Étapes de déploiement :
-> > 1. Création du VPC et subnets
-> > 2. Mise en place des VPC endpoints (SSM, S3, etc.)
-> > 3. Déploiement de l’ALB et de l’ASG (EC2)
-> > 4. Configuration du CloudWatch alarm
-> > 5. Tests de connectivité et monitoring
+> > 1. Création du VPC avec subnets publics et privés.
+> > 2. Mise en place des VPC endpoints SSM et S3.
+> > 3. Mettre en place l’Application Load Balancer (ALB).
+> > 4. Déployer un Auto Scaling Group d’instances EC2 dans les subnets privés.
+> > 5. Configurer CloudWatch Alarm sur Target_4XXCount.
+> > 6. Vérifier le fonctionnement :
+> > > - Accès applicatif via ALB.
+> > > - Connexion maintenance via SSM.
+> > > - Déclenchement de l’alarme en cas d’erreurs 4XX.
 
  > [!NOTE]
 > 5. Usage & Maintenance 
