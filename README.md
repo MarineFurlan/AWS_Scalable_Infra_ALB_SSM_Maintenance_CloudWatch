@@ -170,10 +170,12 @@ resource "aws_vpc_endpoint" "ssm" {
 
 ## 4. Features
 <a name="#4-features"></a>    
-- Scalabilité : auto scaling des instances EC2 en fonction des besoins.     
-- Sécurité : aucune exposition SSH, maintenance uniquement via SSM Session Manager.   
-- Monitoring : alarme CloudWatch pour erreurs 4XX.   
-- Optimisation : instances privées avec accès S3 via un vpc endpoint pour charger les fichiers de configuration au boot.
+- **Scalabilité** : auto scaling des instances EC2 en fonction des besoins.     
+- **Sécurité** : aucune exposition SSH, maintenance uniquement via SSM Session Manager.   
+- **Monitoring** : alarme CloudWatch pour erreurs 4XX.
+- **Reproductibilité et automatisation** : déploiement automatisé et reproductible via Terraform.   
+- **Optimisation** : instances privées avec accès S3 via un vpc endpoint pour charger les fichiers de configuration au boot.
+
 <br/>
 <br/>
 <br/>
