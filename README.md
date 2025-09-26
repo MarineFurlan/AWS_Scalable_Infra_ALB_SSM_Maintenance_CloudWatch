@@ -27,10 +27,10 @@
 
  > [!NOTE]
 > 3. Features 
-> - Scalabilité : Auto Scaling Group configuré
-> - Sécurité : accès via VPC endpoints + SSM Session Manager
-> - Monitoring : alarme CloudWatch pour erreurs 4XX
-> - Optimisation : instances privées avec accès S3 pour le bootstrap
+> > - Scalabilité : auto scaling des instances EC2 en fonction des besoins.   
+> > - Sécurité : aucune exposition SSH, maintenance uniquement via SSM Session Manager.   
+> > - Monitoring : alarme CloudWatch pour erreurs 4XX.   
+> > - Optimisation : instances privées avec accès S3 via un vpc endpoint pour charger les fichiers de configuration au boot.
 
  > [!NOTE]
 > 4. Deployment Steps 
