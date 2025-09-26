@@ -30,7 +30,10 @@ La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM),
 <br/>
 
 ## 2. Design Decisions   
-<a name="#2-design-decisions"></a>   
+<a name="#2-design-decisions"></a>
+### Terraform
+&emsp;&emsp;L'utilisation d'Infrastructure as Code permet de versionner et reproduire facilement l’environnement, créer des modules réutilisables, déployer de manière automatisée en respectant les bonnes pratiques cloud et détruire l'infrastructure en une seule commande lorsqu'elle n'est plus nécessaire afin de respecter un budget.    
+
 ### VPC Endpoint S3 plutôt qu’une NAT Gateway (coût et besoin limité d’accès Internet). 
 &emsp;&emsp;Les instances EC2 sont déployées dans des subnets privés et n’ont pas besoin d’un accès Internet permanent.    
 Plutôt que de créer une NAT Gateway (qui génère des coûts supplémentaires), un VPC Endpoint S3 a été utilisé pour permettre le bootstrap et l’accès aux artefacts stockés dans S3 de manière sécurisée et privée.  
@@ -55,7 +58,7 @@ Cette approche permet de montrer la logique de création et de gestion des alarm
       
 ### Composants principaux : 
    
-:open_file_folder:[ALB (Application Load Balancer)](./modules/alb/main.tf) : routage du trafic HTTP/HTTPS
+:open_file_folder:[ALB (Application Load Balancer)](./modules/alb/main.tf) : routage du trafic
 <details>
   
 <summary>See ALB code</summary>
