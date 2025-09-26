@@ -52,9 +52,12 @@
 
  > [!NOTE]
 > 5. Usage & Maintenance 
-> - Comment accéder aux instances via SSM Session Manager
-> - Comment surveiller l’infra via CloudWatch Dashboard
-> - Bonnes pratiques (tags, IAM least privilege, etc.)
+> - Accès aux instances : utiliser AWS Systems Manager → Session Manager (aucun besoin de clé SSH).
+> - Monitoring : suivre les métriques et alarmes dans CloudWatch Dashboard.
+> - Bonnes pratiques :
+> > - IAM avec le principe de least privilege.
+> > - Tagging des ressources pour une meilleure gestion.
+> > - Logs centralisés (CloudWatch Logs).   
 
  > [!NOTE]
 > 6. Alerts & Monitoring
