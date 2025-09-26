@@ -13,14 +13,14 @@
 - [References](#9-references)
   
 ## 1. Introduction 
-    
-Ce projet présente une architecture scalable, sécurisée et monitorée sur AWS.<a name="#1-introduction"></a>          
+<a name="#1-introduction"></a>     
+Ce projet présente une architecture scalable, sécurisée et monitorée sur AWS.         
 Il s'agit de déployer une application web derrière un Application Load Balancer (ALB) dans un VPC privé, avec un Auto Scaling Group d’instances EC2.   
 La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM), sans accès SSH direct, et la supervision est centralisée avec CloudWatch (métriques et alertes).   
    
 ## 2. Architecture Overview
-    
-<img width="2028" height="1049" alt="WebApp_EmailAlarm_SSMConnect drawio(1)" src="https://github.com/user-attachments/assets/7dbff49e-2482-492d-9902-2619b60d88c5" /> <a name="#2-architecture-overview"></a>    
+<a name="#2-architecture-overview"></a>      
+<img width="2028" height="1049" alt="WebApp_EmailAlarm_SSMConnect drawio(1)" src="https://github.com/user-attachments/assets/7dbff49e-2482-492d-9902-2619b60d88c5" />   
       
 ### Composants principaux : 
    
@@ -106,8 +106,8 @@ resource "aws_vpc_endpoint" "ssm" {
 
 
 ## 3. Features
-   
-- Scalabilité : auto scaling des instances EC2 en fonction des besoins.<a name="#3-features"></a>      
+<a name="#3-features"></a>    
+- Scalabilité : auto scaling des instances EC2 en fonction des besoins.     
 - Sécurité : aucune exposition SSH, maintenance uniquement via SSM Session Manager.   
 - Monitoring : alarme CloudWatch pour erreurs 4XX.   
 - Optimisation : instances privées avec accès S3 via un vpc endpoint pour charger les fichiers de configuration au boot.
@@ -247,10 +247,9 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 > - Valeur du projet pour ton portfolio
 
 
-> [!NOTE]
-> 9. References
+9. References
 <a name="#9-references"></a>
-> > Application Load Balancer – AWS Docs
-> > Auto Scaling Groups – AWS Docs
-> > AWS Systems Manager (SSM)
-> > Amazon CloudWatch Monitoring
+[Application Load Balancer – AWS Docs](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html)
+[Auto Scaling Groups – AWS Docs](https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-groups.html)
+[AWS Systems Manager (SSM)](https://docs.aws.amazon.com/systems-manager/)
+[Amazon CloudWatch Monitoring](https://docs.aws.amazon.com/cloudwatch/)
