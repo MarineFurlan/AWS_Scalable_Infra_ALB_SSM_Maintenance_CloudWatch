@@ -8,19 +8,22 @@
  > [!NOTE]
 > 1. Introduction
 > - Contexte du projet (objectif, problématique adressée)
+> > Ce projet présente une architecture scalable, sécurisée et monitorée sur AWS.      
 > - Description générale de l’architecture (scalable, sécurisée, monitorée)
-> - Public cible (portfolio, démonstration technique, bonnes pratiques)
+> > Il s'agit de déployer une application web derrière un Application Load Balancer (ALB) dans un VPC privé, avec un Auto Scaling Group d’instances EC2.   
+> > La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM), sans accès SSH direct, et la supervision est centralisée avec CloudWatch (métriques et alertes).   
 
  > [!NOTE]
 > 2. Architecture Overview 
 > - Schéma d’architecture (diagramme AWS)
-> <img width="2028" height="1049" alt="WebApp_EmailAlarm_SSMConnect drawio(1)" src="https://github.com/user-attachments/assets/7dbff49e-2482-492d-9902-2619b60d88c5" /> \
+> <img width="2028" height="1049" alt="WebApp_EmailAlarm_SSMConnect drawio(1)" src="https://github.com/user-attachments/assets/7dbff49e-2482-492d-9902-2619b60d88c5" />
+>    
 > - Composants principaux :
-> > - ALB (Application Load Balancer) : routage du trafic HTTP/HTTPS
-> > - EC2 Auto Scaling Group : haute disponibilité et scalabilité
-> > - Private Subnets : sécurité réseau renforcée
-> > - VPC Endpoints (SSM, S3, etc.) : connectivité privée et sécurisée
-> > - CloudWatch Monitoring : métriques et alertes (erreurs 4XX, etc.)
+> - ALB (Application Load Balancer) : routage du trafic HTTP/HTTPS
+> - EC2 Auto Scaling Group : haute disponibilité et scalabilité
+> - Private Subnets : sécurité réseau renforcée
+> - VPC Endpoints (SSM, S3, etc.) : connectivité privée et sécurisée
+> - CloudWatch Monitoring : métriques et alertes (erreurs 4XX, etc.)
 
  > [!NOTE]
 > 3. Features 
