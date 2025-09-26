@@ -84,8 +84,74 @@ Terraform
 2. Mise en place des VPC endpoints SSM et S3.
 3. Mettre en place l’Application Load Balancer (ALB).
 4. Déployer un Auto Scaling Group d’instances EC2 dans les subnets privés.
-5. Configurer CloudWatch Alarm sur Target_4XXCount.
-6. Vérifier le fonctionnement :
+```terraform
+resource "aws_autoscaling_group" "this" {
+  name = "${var.name}-asg"
+
+  min_size            = var.min_capacity
+  max_size            = var.max_capacity
+  desired_capacity    = var.desired_capacity
+  vpc_zone_identifier = var.private_subnets_ids
+
+  launch_template {
+    id      = aws_launch_template.webApp.id
+    version = "$Latest"
+  }
+
+  target_group_arns = [var.tg_arn]
+  health_check_type         = "ELB"
+  health_check_grace_period = 30
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  tag {
+    key                 = "Name"
+    value               = "${var.name}-asg"
+    propagate_at_launch = true
+  }
+
+}
+```
+```terraform
+
+resource "aws_launch_template" "webApp" {
+  name_prefix   = "${var.name}-lt"
+  image_id      = var.ami
+  instance_type = var.instance_type
+
+  iam_instance_profile {
+    name = var.instance_profile_name
+  }
+
+  user_data = base64encode(<<-EOF
+              #!/bin/bash
+              dnf update -y
+              dnf install -y httpd
+              systemctl start httpd
+              systemctl enable httpd
+
+              INSTANCE_ID = $(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+
+
+              echo "<h1>Hello from $(hostname -f)</h1>" > /var/www/html/index.html
+              EOF
+  )
+
+  network_interfaces {
+    associate_public_ip_address = false
+    security_groups = [aws_security_group.webApp.id]
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+```
+   
+6. Configurer CloudWatch Alarm sur Target_4XXCount.
+7. Vérifier le fonctionnement :
 - Accès applicatif via ALB.
 - Connexion maintenance via SSM.
 - Déclenchement de l’alarme en cas d’erreurs 4XX.
