@@ -196,11 +196,10 @@ Voici les étapes principales pour reproduire l’environnement :
   
 ### <ins>Étapes de déploiement :</ins>   
 
-### _Ecriture et utilisation du code_  
-1. Création du [VPC](./modules/vpc/main.tf) avec subnets publics et privés.
-2. Mise en place des [VPC endpoints](./modules/vpc_endpoints/main.tf) SSM et S3.
-3. Mise en place l’[Application Load Balancer (ALB)](./modules/alb/main.tf).
-4. Mise en place de l'[Auto Scaling Group](./modules/asg/main.tf) d’instances EC2 dans les subnets privés.
+1. Ecriture du [VPC](./modules/vpc/main.tf) avec subnets publics et privés.
+2. Ecriture des [VPC endpoints](./modules/vpc_endpoints/main.tf) SSM et S3.
+3. Ecriture de l’[Application Load Balancer (ALB)](./modules/alb/main.tf).
+4. Ecriture de l'[Auto Scaling Group](./modules/asg/main.tf) d’instances EC2 dans les subnets privés.
 <details>
   
 <summary>See asg code</summary>
@@ -278,7 +277,7 @@ resource "aws_launch_template" "webApp" {
 ```
 </details>
 
-5. Configuration de la [CloudWatch Alarm](./modules/cloudwatch/main.tf) sur Target_4XXCount.
+5. Ecriture de la [CloudWatch Alarm](./modules/cloudwatch/main.tf) sur Target_4XXCount.
 <details>
   
 <summary>See alarm code</summary>
