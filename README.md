@@ -336,8 +336,7 @@ L'infrastructure se déploie.
 ### _Connexion maintenance via SSM_
 
 - Se connecter à l'instance via SSM Connect
-
-![ssm_connect](https://github.com/user-attachments/assets/4e9ccc12-1d90-455a-aa07-677879aa940b) 
+<img width="1776" height="498" alt="ssm_connect" src="https://github.com/user-attachments/assets/9100b977-c117-46f3-a782-3a042fd2b21f" />
 
 ### _Resiliency in case of failure_
 
