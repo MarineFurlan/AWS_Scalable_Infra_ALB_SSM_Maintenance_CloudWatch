@@ -206,10 +206,10 @@ Voici les étapes principales pour reproduire l’environnement :
   
 ### <ins>Étapes de déploiement :</ins>   
 
-1. Ecriture du [VPC](./modules/vpc/main.tf) avec subnets publics et privés.
-2. Ecriture des [VPC endpoints](./modules/vpc_endpoints/main.tf) SSM et S3.
-3. Ecriture de l’[Application Load Balancer (ALB)](./modules/alb/main.tf).
-4. Ecriture de l'[Auto Scaling Group](./modules/asg/main.tf) d’instances EC2 dans les subnets privés.
+1. Ecrire le [VPC](./modules/vpc/main.tf) avec subnets publics et privés.
+2. Ecrire les [VPC endpoints](./modules/vpc_endpoints/main.tf) SSM et S3.
+3. Ecrire l’[Application Load Balancer (ALB)](./modules/alb/main.tf).
+4. Ecrire l'[Auto Scaling Group](./modules/asg/main.tf) d’instances EC2 dans les subnets privés.
 <details>
   
 <summary>See asg code</summary>
@@ -287,7 +287,7 @@ resource "aws_launch_template" "webApp" {
 ```
 </details>
 
-5. Ecriture de la [CloudWatch Alarm](./modules/cloudwatch/main.tf) sur Target_4XXCount.
+5. Ecrire la [CloudWatch Alarm](./modules/cloudwatch/main.tf) sur Target_4XXCount.
 <details>
   
 <summary>See alarm code</summary>
@@ -311,9 +311,9 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 
 6. Lancer la commande *terraform init* pour initialiser les modules.
 
-7. Lancer la commande *terraform plan* pour vérifier ce qui va être créé. Votre adresse mail sera demandée dans la console pour y permettre l'envoi d'alarmes sécurité.
+7. Lancer la commande *terraform plan* pour vérifier ce qui va être créé. Entrer l'adresse mail demandée dans la console pour y permettre l'envoi d'alarmes sécurité.
 
-8. Lancer la commande *terraform apply* et confirmer son adresse mail dans la console.
+8. Lancer la commande *terraform apply* et confirmer l'adresse mail dans la console.
 L'infrastructure se déploie.
 
 9. Accepter l'abonnement aux alarmes sécurité dans sa boîte mail.
@@ -322,7 +322,7 @@ L'infrastructure se déploie.
    
 ### <ins>Tests</ins>
 
-&emsp;&emsp;Après vérification dans la console AWS de la concordance des ressources créées en rapport à l'infrastructure souhaitée nous pouvons faire les tests suivants :
+&emsp;&emsp;Après vérification dans la console AWS de la concordance des ressources créées en rapport à l'infrastructure souhaitée, les tests suivants peuvent être effectués :
 
 ### _Accès applicatif via ALB_
 
@@ -330,7 +330,7 @@ L'infrastructure se déploie.
 
 ![dns_output](https://github.com/user-attachments/assets/905eece7-aba0-4811-a524-35eb39e3ff18)
   
-- Si la connexion est établie, la page affichera "Hello from {current-instance}" et sur plusieurs refresh de la page, le message basculera donc de l'instance 1 à 2.
+- Si la connexion est établie, la page affichera "Hello from {current-instance}" et sur plusieurs refresh de la page, le serveur basculera de l'instance 1 à 2.
 
 <img width="776" height="82" alt="First_instance_in_server" src="https://github.com/user-attachments/assets/b6ce9de0-f6ba-44b8-aec8-e854bf093089" />
 <img width="776" height="82" alt="Second_instance_in_server" src="https://github.com/user-attachments/assets/4bc10bc6-3aed-4ce4-b3cb-2cf701de04a3" />
@@ -345,22 +345,22 @@ L'infrastructure se déploie.
 
 ### _Connexion maintenance via SSM_
 
-- Se connecter à l'instance via SSM Connect
+- Vérifier si la connection via SSM Connect est permise.
 <img width="1776" height="498" alt="ssm_connect" src="https://github.com/user-attachments/assets/9100b977-c117-46f3-a782-3a042fd2b21f" />
 
 ### _Resiliency in case of failure_
 
 - Stopper une instance afin de simuler un problème de zone.  
-Immédiatement, dans la section Target Group de la console AWS on peut observer la mise à jour de l'instance en "unhealthy", tandis que les refresh de la page du serveur ne pointe plus que vers l'instance restante.
+Immédiatement, dans la section Target Group de la console AWS on peut observer la mise à jour de l'instance en "unhealthy", tandis que le serveur ne pointe plus que vers l'instance restante.
 <img width="776" height="82" alt="Stopped_instance" src="https://github.com/user-attachments/assets/6ddd16cb-dac6-415f-9133-3e40adca58ed" />
 
 
-Après quelques temps, l'instance est drainée pour finalement disparaître et une nouvelle est créée pour la remplacer.
+Après quelques temps, l'instance est drainée pour finalement être remplacée par une nouvelle.
 <img width="776" height="82" alt="Draining_instance" src="https://github.com/user-attachments/assets/4d3f13a2-279f-4571-84b7-c09ac1662cf3" />
 <img width="776" height="82" alt="New_instance_booted" src="https://github.com/user-attachments/assets/9bf8858f-2737-42ae-8ac5-684167405cf2" />
 
 
-Dorénavant, le refresh de la page affichera le texte associée à la nouvelle instance.
+Dorénavant, le serveur peut basculer sur la nouvelle instance.
 <img width="776" height="82" alt="new_instance_ip" src="https://github.com/user-attachments/assets/c9bba3d2-5dd7-48fc-9e42-2597cae48f04" />
 <img width="776" height="82" alt="Third_instance_in_server" src="https://github.com/user-attachments/assets/b5d1790e-8665-441a-b0ef-428eb9b632af" />
 
