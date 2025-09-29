@@ -312,7 +312,7 @@ L'infrastructure se déploie.
    
 ### <ins>Tests</ins>
 
-10. Après vérification dans la console AWS de la concordance des ressources créées en rapport à l'infrastructure souhaitée nous pouvons faire les tests suivants :
+&emsp;&emsp;Après vérification dans la console AWS de la concordance des ressources créées en rapport à l'infrastructure souhaitée nous pouvons faire les tests suivants :
 
 ### _Accès applicatif via ALB_
 
