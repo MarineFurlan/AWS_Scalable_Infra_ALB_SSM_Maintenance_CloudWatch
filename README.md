@@ -413,9 +413,10 @@ L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://cal
 
 ## 7. Improvements & Next Steps
 <a name="#7-improvements--next-steps"></a>
-- Ajouter un WAF (Web Application Firewall) pour renforcer la sécurité.
-- Configurer l’ALB en HTTPS avec un certificat ACM.
-- Étendre le monitoring (logs applicatifs, métriques supplémentaires, création de dashboard personnalisés).   
+&emsp;&emsp;Plusieurs options sont envisageables pour faire évoluer l'infrastructure, dont :  
+- Intégrer un WAF (Web Application Firewall) pour renforcer la protection contre les attaques et élargir le champ de surveillance.  
+- Configurer l’ALB en HTTPS avec un certificat ACM afin de chiffrer le trafic et encore augmenter la sécurité.  
+- Étendre le monitoring (logs applicatifs, métriques supplémentaires, création de dashboard personnalisés) pour mieux anticiper les problèmes et mieux suivre l'utilisation de l'application.  
 <br/>
 <br/>
 <br/>
