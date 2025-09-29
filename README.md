@@ -12,12 +12,10 @@
 - [Architecture Overview](#3-architecture-overview)
 - [Features](#4-features)
 - [Deployment Steps](#5-deployment-steps)
-- [Usage & Maintenance](#6-usage--maintenance)
-- [Alerts & Monitoring](#7-alerts--monitoring)
-- [Pricing](#8-pricing)
-- [Improvements & Next Steps](#9-improvements--next-steps)
-- [Conclusion](#10-conclusion)
-- [References](#11-references)
+- [Pricing](#6-pricing)
+- [Improvements & Next Steps](#7-improvements--next-steps)
+- [Conclusion](#8-conclusion)
+- [References](#9-references)
 <br/>
 <br/>
 <br/>
@@ -308,42 +306,36 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 L'infrastructure se déploie.
 
 9. Accepter l'abonnement aux alarmes sécurité dans sa boîte mail.
+    
 ![Email_notif](https://github.com/user-attachments/assets/df101df1-d6b3-4f3d-9888-5a7e0b9f3934)
    
 11. Vérifier le fonctionnement :
-    
-<br/>
-<ins>Accès applicatif via ALB :</ins>  
-<br/>
+
+### Accès applicatif via ALB :
 
 - Copier l'adresse du ALB dans la sortie outputs de la console et y accéder sur navigateur.
-- 
+
 ![dns_output](https://github.com/user-attachments/assets/905eece7-aba0-4811-a524-35eb39e3ff18)
   
 - Si la connexion est établie, la page affichera "Hello from {current-instance}" et sur plusieurs refresh de la page, le message basculera donc de l'instance 1 à 2.
-- 
-![First_instance_in_server](https://github.com/user-attachments/assets/f363236e-1801-43a1-b6b6-342595d6c759)
 
+![First_instance_in_server](https://github.com/user-attachments/assets/f363236e-1801-43a1-b6b6-342595d6c759)
 ![Second_instance_in_server](https://github.com/user-attachments/assets/efa04671-4c5a-4e36-a840-72ffb74d8fd3) 
 
 - Dans les screenshots ci-dessous, on peut observer quelle instance possède quelle IP pour mieux les identifier :
-- 
-![First_Instance_IP](https://github.com/user-attachments/assets/fb14864e-e607-46a8-a393-2e8cad20c4ff)
 
+![First_Instance_IP](https://github.com/user-attachments/assets/fb14864e-e607-46a8-a393-2e8cad20c4ff)
 ![Second_Instance_IP](https://github.com/user-attachments/assets/2a02c746-5696-49b0-a53e-3e49daa98bb7)  
 
 - Dans la console AWS, le target group contenant les instances les montrera saines et présentes dans des AZs différentes :
--  
+
 ![target_group](https://github.com/user-attachments/assets/bb84eb3c-3889-4f49-965b-982eb7f66e7c)
 
-<br/>
-<ins>Connexion maintenance via SSM :</ins>  
-<br/>
+### Connexion maintenance via SSM : 
 
 - Se connecter à l'instance via SSM Connect
-- 
-![Instance_Connect](https://github.com/user-attachments/assets/a197d9f6-d28e-4cc1-b6f2-9cf9003fa789)
 
+![Instance_Connect](https://github.com/user-attachments/assets/a197d9f6-d28e-4cc1-b6f2-9cf9003fa789)
 ![ssm_connect](https://github.com/user-attachments/assets/4e9ccc12-1d90-455a-aa07-677879aa940b) 
 
 - Déclenchement de l’alarme en cas d’erreurs 4XX. 
@@ -352,31 +344,8 @@ L'infrastructure se déploie.
 <br/>
 <br/>
 
-## 6. Usage & Maintenance
-<a name="#6-usage--maintenance"></a>
-- Accès aux instances : utiliser AWS Systems Manager → Session Manager (aucun besoin de clé SSH).
-- Monitoring : suivre les métriques et alarmes dans CloudWatch Dashboard.
-- Bonnes pratiques :  
-&emsp;&emsp;- IAM avec le principe de least privilege.  
-&emsp;&emsp;- Tagging des ressources pour une meilleure gestion.  
-&emsp;&emsp;- Logs centralisés (CloudWatch Logs).     
-<br/>
-<br/>
-<br/>
-
-## 7. Alerts & Monitoring
-<a name="#7-alerts--monitoring"></a>
-- Alarme principale : Target_4XXCount déclenche une notification email via SNS si un seuil est dépassé.
-- Extensions d'alarmes possibles :
-    - "PacketsRejected" pour détecter le traffic bloqué au niveau des Security Groups. Cela équivaut aux tentatives d'intrusion et scans de ports ouverts.
-    - "erreurs 5xx" pour détecter les attaque DDoS et les pannes de serveur.
-    - "unauthorized access" pour détecter les tentatives d'accès IAM non autorisées.
-<br/>
-<br/>
-<br/>
-
-## 8. Pricing
-<a name="#8-pricing"></a>
+## 6. Pricing
+<a name="#6-pricing"></a>
 &emsp;&emsp;L’infrastructure a été pensée avec une approche coût/efficacité, afin de concilier bonnes pratiques AWS et optimisation budgétaire.  
 L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://calculator.aws) et les pages officielles de tarification des services.  
 
@@ -408,8 +377,8 @@ L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://cal
 <br/>
 <br/>
 
-## 9. Improvements & Next Steps
-<a name="#9-improvements--next-steps"></a>
+## 7. Improvements & Next Steps
+<a name="#7-improvements--next-steps"></a>
 - Ajouter un WAF (Web Application Firewall) pour renforcer la sécurité.
 - Configurer l’ALB en HTTPS avec un certificat ACM.
 - Étendre le monitoring (logs applicatifs, métriques supplémentaires, création de dashboard personnalisés).   
@@ -417,16 +386,16 @@ L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://cal
 <br/>
 <br/>
 
-## 10. Conclusion
-<a name="#10-conclusion"></a>
+## 8. Conclusion
+<a name="#8-conclusion"></a>
 - Résumé des points clés (scalabilité, sécurité, monitoring)
 - Valeur du projet pour ton portfolio
 <br/>
 <br/>
 <br/>
 
-## 11. References
-<a name="#11-references"></a>   
+## 9. References
+<a name="#9-references"></a>   
 :link:[Application Load Balancer – AWS Docs](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html)  
 :link:[Auto Scaling Groups – AWS Docs](https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-groups.html)  
 :link:[PrivateLinks – AWS Docs](https://docs.aws.amazon.com/vpc/latest/privatelink/concepts.html)  
