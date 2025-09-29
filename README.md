@@ -339,7 +339,6 @@ Après vérification dans la console AWS de la concordance des ressources créé
 
 - Se connecter à l'instance via SSM Connect
 
-![Instance_Connect](https://github.com/user-attachments/assets/a197d9f6-d28e-4cc1-b6f2-9cf9003fa789)
 ![ssm_connect](https://github.com/user-attachments/assets/4e9ccc12-1d90-455a-aa07-677879aa940b) 
 
 ## Resiliency in case of failure
@@ -356,14 +355,15 @@ Après quelques temps, l'instance est drainée pour finalement disparaître et u
 
 Dorénavant, le refresh de la page affichera le texte associée à la nouvelle instance.
 <img width="1563" height="249" alt="Capture d'écran 2025-09-29 153519" src="https://github.com/user-attachments/assets/3fc6423d-1574-4ce7-914a-e628c6438e89" />
-<img width="1141" height="554" alt="Capture d'écran 2025-09-29 153441" src="https://github.com/user-attachments/assets/366e3177-021e-424e-9059-9b5ee533419a" />
+<img width="776" height="82" alt="Third_instance_in_server" src="https://github.com/user-attachments/assets/b5d1790e-8665-441a-b0ef-428eb9b632af" />
+
 
 
 ### Déclenchement de l’alarme en cas d’erreurs 4XX : 
 
 - Dans Amazon SNS > Rubriques > vpc_alerts_webApp : Verifier l'abonnement email afin de recevoir les alertes.
 
-![email_confirmed](https://github.com/user-attachments/assets/0fd571bf-f4fa-46b9-b8e1-b94eebb40329)
+<img width="776" height="82" alt="Email_confirmed" src="https://github.com/user-attachments/assets/e4dafef2-5bf2-423c-a8e9-51cef8ceb3cf" />
 
 - Simulate 4xx errors to trigger alarm with, for instance, this code in PowerShell :
 
