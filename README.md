@@ -317,9 +317,15 @@ L'infrastructure se déploie.
 - Si la connexion est établie, la page affichera "Hello from {current-instance}" et sur plusieurs refresh de la page, le message basculera donc de l'instance 1 à 2.
 ![First_instance_in_server](https://github.com/user-attachments/assets/f363236e-1801-43a1-b6b6-342595d6c759)
 ![Second_instance_in_server](https://github.com/user-attachments/assets/efa04671-4c5a-4e36-a840-72ffb74d8fd3)
+- Dans les screenshots ci-dessous, on peut observer quelle instance possède quelle IP pour mieux les identifier :
+![First_Instance_IP](https://github.com/user-attachments/assets/fb14864e-e607-46a8-a393-2e8cad20c4ff)
+![Second_Instance_IP](https://github.com/user-attachments/assets/2a02c746-5696-49b0-a53e-3e49daa98bb7)
 - Dans la console AWS, le target group contenant les instances les montrera saines et présentes dans des AZs différentes :
 ![target_group](https://github.com/user-attachments/assets/bb84eb3c-3889-4f49-965b-982eb7f66e7c)
-- Connexion maintenance via SSM.
+**Connexion maintenance via SSM :**
+- Se connecter à l'instance via SSM Connect
+![ssm_connect](https://github.com/user-attachments/assets/4e9ccc12-1d90-455a-aa07-677879aa940b)
+![Instance_Connect](https://github.com/user-attachments/assets/a197d9f6-d28e-4cc1-b6f2-9cf9003fa789)
 - Déclenchement de l’alarme en cas d’erreurs 4XX.
 
 11. Si besoin, détruire l'infrastructure avec la commande "*terraform destroy*.
