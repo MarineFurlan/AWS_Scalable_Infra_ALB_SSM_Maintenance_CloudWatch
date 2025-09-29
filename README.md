@@ -14,8 +14,7 @@
 - [Deployment Steps](#5-deployment-steps)
 - [Pricing](#6-pricing)
 - [Improvements & Next Steps](#7-improvements--next-steps)
-- [Conclusion](#8-conclusion)
-- [References](#9-references)
+- [References](#8-references)
 <br/>
 <br/>
 <br/>
@@ -421,16 +420,8 @@ L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://cal
 <br/>
 <br/>
 
-## 8. Conclusion
-<a name="#8-conclusion"></a>
-- Résumé des points clés (scalabilité, sécurité, monitoring)
-- Valeur du projet pour ton portfolio
-<br/>
-<br/>
-<br/>
-
-## 9. References
-<a name="#9-references"></a>   
+## 8. References
+<a name="#8-references"></a>   
 :link:[Application Load Balancer – AWS Docs](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html)  
 :link:[Auto Scaling Groups – AWS Docs](https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-groups.html)  
 :link:[PrivateLinks – AWS Docs](https://docs.aws.amazon.com/vpc/latest/privatelink/concepts.html)  
