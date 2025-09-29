@@ -326,8 +326,6 @@ L'infrastructure se déploie.
 
 <br/>
 
-<br/>  
-
 ### _Accès applicatif via ALB_
 
 - Copier l'adresse du ALB dans la sortie outputs de la console et y accéder sur navigateur.
