@@ -188,7 +188,7 @@ resource "aws_vpc_endpoint" "ssm" {
 <a name="#5-deployment-steps"></a>
 &emsp;&emsp;L’infrastructure est déployée avec Terraform, permettant un déploiement rapide, répétable, automatisé et versionné.  
 Voici les étapes principales pour reproduire l’environnement :  
-### <ins>Prérequis</ins>
+### <ins>Prérequis :</ins>
    
 - Compte AWS actif.   
 - AWS CLI configurée.   
@@ -196,7 +196,7 @@ Voici les étapes principales pour reproduire l’environnement :
   
 ### <ins>Étapes de déploiement :</ins>   
 
-### Ecriture et utilisation du code  
+### _Ecriture et utilisation du code_  
 1. Création du [VPC](./modules/vpc/main.tf) avec subnets publics et privés.
 2. Mise en place des [VPC endpoints](./modules/vpc_endpoints/main.tf) SSM et S3.
 3. Mise en place l’[Application Load Balancer (ALB)](./modules/alb/main.tf).
@@ -311,9 +311,9 @@ L'infrastructure se déploie.
     
 ![Email_notif](https://github.com/user-attachments/assets/df101df1-d6b3-4f3d-9888-5a7e0b9f3934)
    
-11. Vérifier le fonctionnement :
+### _Tests_
 
-Après vérification dans la console AWS de la concordance des ressources créées en rapport à l'infrastructure souhaitée nous pouvons faire quelques tests.
+10. Après vérification dans la console AWS de la concordance des ressources créées en rapport à l'infrastructure souhaitée nous pouvons faire les tests suivants :
 
 ### Accès applicatif via ALB :
 
