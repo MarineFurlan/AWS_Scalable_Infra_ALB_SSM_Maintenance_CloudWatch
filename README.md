@@ -311,7 +311,14 @@ L'infrastructure se déploie.
 ![Email_notif](https://github.com/user-attachments/assets/df101df1-d6b3-4f3d-9888-5a7e0b9f3934)
    
 11. Vérifier le fonctionnement :
-- Accès applicatif via ALB.
+**Accès applicatif via ALB :**
+- Copier l'adresse du ALB dans la sortie outputs de la console et y accéder sur navigateur.
+![dns_output](https://github.com/user-attachments/assets/905eece7-aba0-4811-a524-35eb39e3ff18)
+- Si la connexion est établie, la page affichera "Hello from {current-instance}" et sur plusieurs refresh de la page, le message basculera donc de l'instance 1 à 2.
+![First_instance_in_server](https://github.com/user-attachments/assets/effd1d4b-79a6-4d25-ae2c-9910a7458af8)
+![Second_instance_in_server](https://github.com/user-attachments/assets/9fe7a4db-7e3c-44ac-9d74-f66a227e78da)
+- Dans la console AWS, le target group contenant les instances les montrera saines et présentes dans des AZs différentes :
+![target_group](https://github.com/user-attachments/assets/bb84eb3c-3889-4f49-965b-982eb7f66e7c)
 - Connexion maintenance via SSM.
 - Déclenchement de l’alarme en cas d’erreurs 4XX.
 
