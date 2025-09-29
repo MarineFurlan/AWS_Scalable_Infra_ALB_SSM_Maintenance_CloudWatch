@@ -306,7 +306,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 
 8. Accepter l'abonnement aux alarmes sécurité dans sa boîte mail.
 
-9. Lancer la commande*terraform apply* et confirmer son adresse mail dans la console.
+9. Lancer la commande *terraform apply* et confirmer son adresse mail dans la console.
 L'infrastructure se déploie.
    
 10. Vérifier le fonctionnement :
