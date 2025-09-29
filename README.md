@@ -437,5 +437,7 @@ L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://cal
 :link:[Application Load Balancer – AWS Docs](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html)  
 :link:[Auto Scaling Groups – AWS Docs](https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-groups.html)  
 :link:[PrivateLinks – AWS Docs](https://docs.aws.amazon.com/vpc/latest/privatelink/concepts.html)  
+:link:[AWS Pricing Calculator](https://calculator.aws/#/)  
+
 :link:[AWS Systems Manager (SSM)](https://docs.aws.amazon.com/systems-manager/)  
 :link:[Amazon CloudWatch Monitoring](https://docs.aws.amazon.com/cloudwatch/)  
