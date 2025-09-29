@@ -404,12 +404,12 @@ L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://cal
 | Service                      | Choix effectué                   | Estimation mensuelle*  | Justification |
 |------------------------------|----------------------------------|------------------------|---------------|
 | **EC2 (Auto Scaling Group)** | 2 instances t2.micro en EC2 Instance Savings Plan (1an)   | ~13,43 USD             | Famille d'instance stable. 1 seule région. ~2.05 USD d'économies par rapport à un Compute Savings Plan.
-| **Application Load Balancer**| 1 ALB actif                      | ~19.32 USD             | Requis pour gérer le routage HTTP vers plusieurs instances. |
-| **VPC Endpoint (S3)**        | 1 Gateway Endpoint               | ~0 USD                 | Gratuit à l’usage contrairement à une NAT Gateway |
-| **VPC Endpoint (SSM)**       | 3 Interface Endpoint (ssm, ec2messages, ssmmessages) x 2 AZs           | ~48.18 USD                 | Plus de securité et d'économies car 24,82 USD/mois moins cher qu'une NAT Gateway.             
-| **CloudWatch**               | 1 alarme + métriques de base     | ~0 USD                 | Gratuit dans la limite du Free Tier étant de 10 métriques et 10 alarmes/mois + 5Go logs ingérés/mois. La configuration actuelle s'inscrit donc dans le FreeTier même en ajoutant des logs pour stocker les informations de chaque session de maintenance étant généralement inférieures à 50Mo/mois|
-| **SSM Session Manager**      | Inclus dans Free Tier            | ~0 USD                 | Pas de coût additionnel pour l’accès basique via Session Manager sans logging vers CloudWatch. |
-| **TOTAL**                    |                                  | **~67,8 USD**         
+| **Application Load Balancer**| 1 ALB actif                      | 19.32 USD             | Requis pour gérer le routage HTTP vers plusieurs instances. |
+| **VPC Endpoint (S3)**        | 1 Gateway Endpoint               | 0 USD                 | Gratuit à l’usage contrairement à une NAT Gateway |
+| **VPC Endpoint (SSM)**       | 3 Interface Endpoint (ssm, ec2messages, ssmmessages) x 2 AZs           | 48.18 USD                 | Plus de securité et d'économies car 24,82 USD/mois moins cher qu'une NAT Gateway.             
+| **CloudWatch**               | 1 alarme + métriques de base     | 0 USD                 | Gratuit dans la limite du Free Tier étant de 10 métriques et 10 alarmes/mois + 5Go logs ingérés/mois. La configuration actuelle s'inscrit donc dans le FreeTier même en ajoutant des logs pour stocker les informations de chaque session de maintenance étant généralement inférieures à 50Mo/mois|
+| **SSM Session Manager**      | Inclus dans Free Tier            | 0 USD                 | Pas de coût additionnel pour l’accès basique via Session Manager sans logging vers CloudWatch. |
+| **TOTAL**                    |                                  | **67,8 USD**         
 
 \* Les montants sont donnés à titre indicatif pour la région "eu-west-3" et n'inclus que les coûts fixes des services sans les coûts liés au traffic.
 
@@ -424,19 +424,19 @@ L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://cal
 
 | Service                      | Choix effectué                   | Estimation mensuelle*  |
 |------------------------------|----------------------------------|------------------------|
-| _NAT Gateway_                | _1 NAT x 2 AZs_                  | _~73 USD_              |
+| _NAT Gateway_                | _1 NAT x 2 AZs_                  | _73 USD_              |
 
 <br/>
 
-- **Session Manager vs NAT Gateway** : Coûts fixes réduits de 24,82 USD/mois
+- **VPC endpoints vs NAT Gateway** :  
+Coûts fixes réduits de 24,82 USD/mois
 
 <br/> 
 
-- **VPC Endpoint to S3 vs NAT Gateway** : same
-
-<br/> 
-
-- **EC2 Instance Savings Plans vs Compute Savings Plan** : Le scaling de l'infrastructure est horizontal, le type des instances n'a donc pas vocation a être modifié. Le VPC est dans une région unique. Le EC2 Instance Savings Plan propose un discount lorsque les instances utilisées sont de la même famille et situées dans la même région, il est donc plus adpaté à l'infrastructure créée. Aussi pour un engagement sur 1 an, son coût est de 6,72 USD/mois/instance contre 7,74 USD/mois/instance pour le Compute Savings Plans. L'économie est donc de 1,02 USD/mois/instance soit ~2,05 USD/mois pour cette infrastructure.  
+- **EC2 Instance Savings Plans vs Compute Savings Plan** :  
+&emsp;&emsp;Le scaling de l'infrastructure est horizontal, le type des instances n'a donc pas vocation a être modifié et le VPC est dans une région unique. Le "EC2 Instance Savings Plan" propose un discount lorsque les instances utilisées sont de la même famille et situées dans la même région, il est donc plus adpaté à l'infrastructure créée.  
+Aussi, pour un engagement d'1 an, son coût est de 6,72 USD/mois/instance contre 7,74 USD/mois/instance pour le "Compute Savings Plans".  
+L'économie est donc de 1,02 USD/mois/instance soit ~2,05 USD/mois pour cette infrastructure.  
 <br/> 
 <br/>
 <br/>
