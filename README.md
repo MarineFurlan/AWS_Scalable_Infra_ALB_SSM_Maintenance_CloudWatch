@@ -340,9 +340,7 @@ L'infrastructure se déploie.
 
 ### _Resiliency in case of failure_
 
-- Stopper une instance afin de simuler un problème de zone.
-<img width="769" height="665" alt="Capture d'écran 2025-09-29 153219" src="https://github.com/user-attachments/assets/af1ad7ab-ec5f-4ec5-9a60-c0aad01abbba" />
-
+- Stopper une instance afin de simuler un problème de zone.  
 Immédiatement, dans la section Target Group de la console AWS on peut observer la mise à jour de l'instance en "unhealthy", tandis que les refresh de la page du serveur ne pointe plus que vers l'instance restante.
 <img width="776" height="82" alt="Stopped_instance" src="https://github.com/user-attachments/assets/6ddd16cb-dac6-415f-9133-3e40adca58ed" />
 
