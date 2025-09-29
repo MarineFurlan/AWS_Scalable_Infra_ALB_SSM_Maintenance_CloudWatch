@@ -342,11 +342,14 @@ L'infrastructure se déploie.
 - Dans la console AWS, le target group contenant les instances les montrera saines et présentes dans des AZs différentes :
 <img width="832" height="791" alt="target_group" src="https://github.com/user-attachments/assets/4418ea7a-f2bb-4194-a283-3faef77cdd63" />
 
+<br/>
 
 ### _Connexion maintenance via SSM_
 
 - Vérifier si la connection via SSM Connect est permise.
 <img width="1776" height="498" alt="ssm_connect" src="https://github.com/user-attachments/assets/9100b977-c117-46f3-a782-3a042fd2b21f" />
+
+<br/>
 
 ### _Resiliency in case of failure_
 
@@ -364,7 +367,7 @@ Dorénavant, le serveur peut basculer sur la nouvelle instance.
 <img width="776" height="82" alt="new_instance_ip" src="https://github.com/user-attachments/assets/c9bba3d2-5dd7-48fc-9e42-2597cae48f04" />
 <img width="776" height="82" alt="Third_instance_in_server" src="https://github.com/user-attachments/assets/b5d1790e-8665-441a-b0ef-428eb9b632af" />
 
-
+<br/>
 
 ### _Déclenchement de l’alarme en cas d’erreurs 4XX_
 
