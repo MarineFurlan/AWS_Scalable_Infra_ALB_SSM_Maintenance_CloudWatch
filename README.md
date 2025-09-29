@@ -14,9 +14,10 @@
 - [Deployment Steps](#5-deployment-steps)
 - [Usage & Maintenance](#6-usage--maintenance)
 - [Alerts & Monitoring](#7-alerts--monitoring)
+- [Pricing](#8-pricing)
 - [Improvements & Next Steps](#9-improvements--next-steps)
-- [Conclusion](#9-conclusion)
-- [References](#10-references)
+- [Conclusion](#10-conclusion)
+- [References](#11-references)
 <br/>
 <br/>
 <br/>
@@ -341,8 +342,8 @@ L'infrastructure se déploie.
 <br/>
 
 ## 8. Pricing
-
-L’infrastructure a été pensée avec une approche coût/efficacité, afin de concilier bonnes pratiques AWS et optimisation budgétaire.  
+<a name="#8-pricing"></a>
+&emsp;&emsp;L’infrastructure a été pensée avec une approche coût/efficacité, afin de concilier bonnes pratiques AWS et optimisation budgétaire.  
 L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://calculator.aws) et les pages officielles de tarification des services.  
 
 | Service                     | Choix effectué                   | Estimation mensuelle* | Justification |
@@ -358,10 +359,10 @@ L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://cal
 ### Décisions budgétaires clés
 - **VPC Endpoint S3 vs NAT Gateway** → choix du VPC Endpoint pour réduire les coûts tout en permettant aux instances privées d’accéder à S3.  
 - **Session Manager** → évite d’exposer le port 22 et supprime la nécessité d’une bastion ou d’une IP publique.  
-- **Alarme unique** → simplification et réduction des coûts, tout en gardant un schéma facilement reproductible pour plus d’alarmes si besoin.  
-
----
-
+- **Alarme unique** → simplification et réduction des coûts, tout en gardant un schéma facilement reproductible pour plus d’alarmes si besoin.
+<br/>
+<br/>
+<br/>
 
 ## 9. Improvements & Next Steps
 <a name="#9-improvements--next-steps"></a>
@@ -372,16 +373,16 @@ L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://cal
 <br/>
 <br/>
 
-## 9. Conclusion
-<a name="#9-conclusion"></a>
+## 10. Conclusion
+<a name="#10-conclusion"></a>
 - Résumé des points clés (scalabilité, sécurité, monitoring)
 - Valeur du projet pour ton portfolio
 <br/>
 <br/>
 <br/>
 
-## 10. References
-<a name="#10-references"></a>   
+## 11. References
+<a name="#11-references"></a>   
 :link:[Application Load Balancer – AWS Docs](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html)  
 :link:[Auto Scaling Groups – AWS Docs](https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-groups.html)  
 :link:[PrivateLinks – AWS Docs](https://docs.aws.amazon.com/vpc/latest/privatelink/concepts.html)  
