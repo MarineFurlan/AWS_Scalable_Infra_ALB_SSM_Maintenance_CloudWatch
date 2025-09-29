@@ -330,8 +330,7 @@ L'infrastructure se déploie.
 <img width="776" height="82" alt="Second_instance_ip" src="https://github.com/user-attachments/assets/0438c297-6f23-4363-be60-181b15186cf0" />
 
 - Dans la console AWS, le target group contenant les instances les montrera saines et présentes dans des AZs différentes :
-
-![target_group](https://github.com/user-attachments/assets/bb84eb3c-3889-4f49-965b-982eb7f66e7c)
+![target_group](https://github.com/user-attachments/assets/59c19bf4-b7b4-47ca-ab70-83c7bb28dab9)
 
 ### _Connexion maintenance via SSM_
 
