@@ -347,11 +347,13 @@ Après vérification dans la console AWS de la concordance des ressources créé
 <img width="769" height="665" alt="Capture d'écran 2025-09-29 153219" src="https://github.com/user-attachments/assets/af1ad7ab-ec5f-4ec5-9a60-c0aad01abbba" />
 
 Immédiatement, dans la section Target Group de la console AWS on peut observer la mise à jour de l'instance en "unhealthy", tandis que les refresh de la page du serveur ne pointe plus que vers l'instance restante.
-<img width="1892" height="827" alt="Capture d'écran 2025-09-29 153302" src="https://github.com/user-attachments/assets/9a134a3f-6be3-4b06-b3c1-90eb499d4a85" />
+<img width="776" height="82" alt="Stopped_instance" src="https://github.com/user-attachments/assets/6ddd16cb-dac6-415f-9133-3e40adca58ed" />
+
 
 Après quelques temps, l'instance est drainée pour finalement disparaître et une nouvelle est créée pour la remplacer.
-<img width="1894" height="826" alt="Capture d'écran 2025-09-29 153333" src="https://github.com/user-attachments/assets/41338cac-1d6f-40db-b3b9-7d822c1727df" />
-<img width="1903" height="870" alt="Capture d'écran 2025-09-29 153433" src="https://github.com/user-attachments/assets/d31cf75c-589c-47f9-aa78-5655552779fd" />
+<img width="776" height="82" alt="Draining_instance" src="https://github.com/user-attachments/assets/4d3f13a2-279f-4571-84b7-c09ac1662cf3" />
+<img width="776" height="82" alt="New_instance_booted" src="https://github.com/user-attachments/assets/9bf8858f-2737-42ae-8ac5-684167405cf2" />
+
 
 Dorénavant, le refresh de la page affichera le texte associée à la nouvelle instance.
 <img width="1563" height="249" alt="Capture d'écran 2025-09-29 153519" src="https://github.com/user-attachments/assets/3fc6423d-1574-4ce7-914a-e628c6438e89" />
