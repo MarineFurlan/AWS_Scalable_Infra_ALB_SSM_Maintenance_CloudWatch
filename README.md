@@ -323,8 +323,8 @@ Après vérification dans la console AWS de la concordance des ressources créé
   
 - Si la connexion est établie, la page affichera "Hello from {current-instance}" et sur plusieurs refresh de la page, le message basculera donc de l'instance 1 à 2.
 
-![First_instance_in_server](https://github.com/user-attachments/assets/f363236e-1801-43a1-b6b6-342595d6c759)
-![Second_instance_in_server](https://github.com/user-attachments/assets/efa04671-4c5a-4e36-a840-72ffb74d8fd3) 
+<img width="776" height="82" alt="First_instance_in_server" src="https://github.com/user-attachments/assets/b6ce9de0-f6ba-44b8-aec8-e854bf093089" />
+<img width="776" height="82" alt="Second_instance_in_server" src="https://github.com/user-attachments/assets/4bc10bc6-3aed-4ce4-b3cb-2cf701de04a3" />
 
 - Dans les screenshots ci-dessous, on peut observer quelle instance possède quelle IP pour mieux les identifier :
 
