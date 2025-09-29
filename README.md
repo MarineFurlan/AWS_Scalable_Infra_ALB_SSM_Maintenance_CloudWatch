@@ -354,11 +354,12 @@ L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://cal
 | **VPC Endpoint (SSM)**       | 3 Interface Endpoint (ssm, ec2messages, ssmmessages) x 2 AZs           | ~48.18 USD                 | Plus de securité et d'économies car 24,82 USD/mois moins cher qu'une NAT Gateway.             
 | **CloudWatch**               | 1 alarme + métriques de base     | ~0 USD                 | Gratuit dans la limite du Free Tier étant de 10 métriques et 10 alarmes/mois + 5Go logs ingérés/mois. La configuration actuelle s'inscrit donc dans le FreeTier même en ajoutant des logs pour stocker les informations de chaque session de maintenance étant généralement inférieures à 50Mo/mois|
 | **SSM Session Manager**      | Inclus dans Free Tier            | ~0 USD                 | Pas de coût additionnel pour l’accès basique via Session Manager sans logging vers CloudWatch. |
-| **TOTAL                      |                                  | ~67,8 USD          
+| **TOTAL**                    |                                  | ~67,8 USD          
 
 \* Les montants sont donnés à titre indicatif pour la région "eu-west-3" et n'inclus que les coûts fixes des services sans les coûts liés au traffic.
 
 ### Décisions budgétaires clés
+|------------------------------|----------------------------------|------------------------|---------------|
 | _NAT Gateway_                | _1 NAT x 2 AZs_                  | _~73 USD_              | _Higher pricing than for all 4 VPC Endpoints_ 
 - **Session Manager vs NAT Gateway** : Coûts fixes réduits de 24,82 USD/mois
 - **VPC Endpoint to S3 vs NAT Gateway** : same
