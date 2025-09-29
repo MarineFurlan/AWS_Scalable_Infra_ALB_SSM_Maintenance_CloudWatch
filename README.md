@@ -194,11 +194,13 @@ Voici les étapes principales pour reproduire l’environnement :
 - AWS CLI configurée.   
 - Terraform   
   
-### <ins>Étapes de déploiement :</ins>     
+### <ins>Étapes de déploiement :</ins>   
+
+### Ecriture et utilisation du code  
 1. Création du [VPC](./modules/vpc/main.tf) avec subnets publics et privés.
 2. Mise en place des [VPC endpoints](./modules/vpc_endpoints/main.tf) SSM et S3.
-3. Mettre en place l’[Application Load Balancer (ALB)](./modules/alb/main.tf).
-4. Déployer un [Auto Scaling Group](./modules/asg/main.tf) d’instances EC2 dans les subnets privés.
+3. Mise en place l’[Application Load Balancer (ALB)](./modules/alb/main.tf).
+4. Mise en place de l'[Auto Scaling Group](./modules/asg/main.tf) d’instances EC2 dans les subnets privés.
 <details>
   
 <summary>See asg code</summary>
@@ -276,7 +278,7 @@ resource "aws_launch_template" "webApp" {
 ```
 </details>
 
-5. Configurer [CloudWatch Alarm](./modules/cloudwatch/main.tf) sur Target_4XXCount.
+5. Configuration de la [CloudWatch Alarm](./modules/cloudwatch/main.tf) sur Target_4XXCount.
 <details>
   
 <summary>See alarm code</summary>
@@ -310,8 +312,6 @@ L'infrastructure se déploie.
 ![Email_notif](https://github.com/user-attachments/assets/df101df1-d6b3-4f3d-9888-5a7e0b9f3934)
    
 11. Vérifier le fonctionnement :
-
-### VPC configuration :
 
 Après vérification dans la console AWS de la concordance des ressources créées en rapport à l'infrastructure souhaitée nous pouvons faire quelques tests.
 
