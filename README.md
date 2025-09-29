@@ -406,8 +406,8 @@ After 4 to 5 minutes, the email alert is now received
 
 ## 6. Pricing
 <a name="#6-pricing"></a>
-&emsp;&emsp;L’infrastructure a été pensée avec une approche coût/efficacité, afin de concilier bonnes pratiques AWS et optimisation budgétaire.  
-L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://calculator.aws) et les pages officielles de tarification des services.  
+&emsp;&emsp;L’infrastructure a été pensée avec une approche coût/efficacité afin de concilier bonnes pratiques AWS et optimisation budgétaire.  
+L’estimation ci-dessous est basée sur l' [AWS Pricing Calculator](https://calculator.aws).
 
 | Service                      | Choix effectué                   | Estimation mensuelle*  | Justification |
 |------------------------------|----------------------------------|------------------------|---------------|
