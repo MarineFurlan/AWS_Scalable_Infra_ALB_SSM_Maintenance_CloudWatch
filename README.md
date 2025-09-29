@@ -311,6 +311,10 @@ L'infrastructure se déploie.
    
 11. Vérifier le fonctionnement :
 
+### VPC configuration :
+
+Après vérification dans la console AWS de la concordance des ressources créées en rapport à l'infrastructure souhaitée nous pouvons faire quelques tests.
+
 ### Accès applicatif via ALB :
 
 - Copier l'adresse du ALB dans la sortie outputs de la console et y accéder sur navigateur.
@@ -337,6 +341,23 @@ L'infrastructure se déploie.
 
 ![Instance_Connect](https://github.com/user-attachments/assets/a197d9f6-d28e-4cc1-b6f2-9cf9003fa789)
 ![ssm_connect](https://github.com/user-attachments/assets/4e9ccc12-1d90-455a-aa07-677879aa940b) 
+
+## Resiliency in case of failure
+
+- Stopper une instance afin de simuler un problème de zone.
+<img width="769" height="665" alt="Capture d'écran 2025-09-29 153219" src="https://github.com/user-attachments/assets/af1ad7ab-ec5f-4ec5-9a60-c0aad01abbba" />
+
+Immédiatement, dans la section Target Group de la console AWS on peut observer la mise à jour de l'instance en "unhealthy", tandis que les refresh de la page du serveur ne pointe plus que vers l'instance restante.
+<img width="1892" height="827" alt="Capture d'écran 2025-09-29 153302" src="https://github.com/user-attachments/assets/9a134a3f-6be3-4b06-b3c1-90eb499d4a85" />
+
+Après quelques temps, l'instance est drainée pour finalement disparaître et une nouvelle est créée pour la remplacer.
+<img width="1894" height="826" alt="Capture d'écran 2025-09-29 153333" src="https://github.com/user-attachments/assets/41338cac-1d6f-40db-b3b9-7d822c1727df" />
+<img width="1903" height="870" alt="Capture d'écran 2025-09-29 153433" src="https://github.com/user-attachments/assets/d31cf75c-589c-47f9-aa78-5655552779fd" />
+
+Dorénavant, le refresh de la page affichera le texte associée à la nouvelle instance.
+<img width="1563" height="249" alt="Capture d'écran 2025-09-29 153519" src="https://github.com/user-attachments/assets/3fc6423d-1574-4ce7-914a-e628c6438e89" />
+<img width="1141" height="554" alt="Capture d'écran 2025-09-29 153441" src="https://github.com/user-attachments/assets/366e3177-021e-424e-9059-9b5ee533419a" />
+
 
 ### Déclenchement de l’alarme en cas d’erreurs 4XX : 
 
