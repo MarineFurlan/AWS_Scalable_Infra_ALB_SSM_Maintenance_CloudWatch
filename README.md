@@ -327,9 +327,8 @@ Après vérification dans la console AWS de la concordance des ressources créé
 <img width="776" height="82" alt="Second_instance_in_server" src="https://github.com/user-attachments/assets/4bc10bc6-3aed-4ce4-b3cb-2cf701de04a3" />
 
 - Dans les screenshots ci-dessous, on peut observer quelle instance possède quelle IP pour mieux les identifier :
-
-![First_Instance_IP](https://github.com/user-attachments/assets/fb14864e-e607-46a8-a393-2e8cad20c4ff)
-![Second_Instance_IP](https://github.com/user-attachments/assets/2a02c746-5696-49b0-a53e-3e49daa98bb7)  
+<img width="776" height="82" alt="First_instance_ip" src="https://github.com/user-attachments/assets/5316ee90-05e6-409e-b3bf-d8b3353c7116" />
+<img width="776" height="82" alt="Second_instance_ip" src="https://github.com/user-attachments/assets/0438c297-6f23-4363-be60-181b15186cf0" />
 
 - Dans la console AWS, le target group contenant les instances les montrera saines et présentes dans des AZs différentes :
 
