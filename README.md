@@ -171,8 +171,11 @@ resource "aws_vpc_endpoint" "ssm" {
 <br/>
 
 ## 4. Features
-<a name="#4-features"></a>    
-- **Scalabilité** : auto scaling des instances EC2 en fonction des besoins.
+<a name="#4-features"></a>   
+
+<br/>
+
+- **_Scalabilité_** : auto scaling des instances EC2 en fonction des besoins.
   
 <br/>
 
