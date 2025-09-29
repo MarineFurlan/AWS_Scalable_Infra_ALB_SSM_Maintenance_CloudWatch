@@ -338,7 +338,24 @@ L'infrastructure se déploie.
 ![Instance_Connect](https://github.com/user-attachments/assets/a197d9f6-d28e-4cc1-b6f2-9cf9003fa789)
 ![ssm_connect](https://github.com/user-attachments/assets/4e9ccc12-1d90-455a-aa07-677879aa940b) 
 
-- Déclenchement de l’alarme en cas d’erreurs 4XX. 
+### Déclenchement de l’alarme en cas d’erreurs 4XX : 
+
+- Dans Amazon SNS > Rubriques > vpc_alerts_webApp : Verifier l'abonnement email afin de recevoir les alertes.
+
+![email_confirmed](https://github.com/user-attachments/assets/0fd571bf-f4fa-46b9-b8e1-b94eebb40329)
+
+- Simulate 4xx errors to trigger alarm with, for instance, this code in PowerShell :
+
+```PowerShell
+1..12 | ForEach-Object { try { Invoke-WebRequest "http://{alb_dns}/chemin-invalide$($_)?r=$(Get-Random)" -Method GET -ErrorAction Stop -TimeoutSec 5 | Out-Null; "200" } catch { if ($_.Exception.Response) { $_.Exception.Response.StatusCode.value__ } else { "ERR" } } }
+```
+
+After 4 to 5 minutes, the email alert is now received
+
+![email_alarm](https://github.com/user-attachments/assets/95abb978-4a51-48a7-aa14-5ed9e17a5ad8)
+
+
+
 
 11. Si besoin, détruire l'infrastructure avec la commande "*terraform destroy*.
 <br/>
