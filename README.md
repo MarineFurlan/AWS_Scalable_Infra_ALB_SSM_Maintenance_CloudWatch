@@ -326,7 +326,7 @@ L'infrastructure se déploie.
 
 <br/>
 
-<br/>
+<br/>  
 
 ### _Accès applicatif via ALB_
 
@@ -348,14 +348,18 @@ L'infrastructure se déploie.
 
 <br/>
 
+<br/>  
+
 <br/>
 
 ### _Connexion maintenance via SSM_
 
 - Vérifier si la connection via SSM Connect est permise.
-<img width="1776" height="498" alt="ssm_connect" src="https://github.com/user-attachments/assets/9100b977-c117-46f3-a782-3a042fd2b21f" />
+<img width="1776" height="498" alt="ssm_connect" src="https://github.com/user-attachments/assets/9100b977-c117-46f3-a782-3a042fd2b21f" />  
 
 <br/>
+
+<br/>  
 
 <br/>
 
@@ -377,7 +381,7 @@ Dorénavant, le serveur peut basculer sur la nouvelle instance.
 
 <br/>
 
-<br/>
+<br/>  
 
 ### _Déclenchement de l’alarme en cas d’erreurs 4XX_
 
