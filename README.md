@@ -356,7 +356,7 @@ Après quelques temps, l'instance est drainée pour finalement disparaître et u
 
 
 Dorénavant, le refresh de la page affichera le texte associée à la nouvelle instance.
-<img width="776" height="82" alt="new_instance_ip" src="https://github.com/user-attachments/assets/41080962-46fd-4e08-beab-bf0a1d2f5a88" />
+<img width="776" height="82" alt="new_instance_ip" src="https://github.com/user-attachments/assets/c9bba3d2-5dd7-48fc-9e42-2597cae48f04" />
 <img width="776" height="82" alt="Third_instance_in_server" src="https://github.com/user-attachments/assets/b5d1790e-8665-441a-b0ef-428eb9b632af" />
 
 
