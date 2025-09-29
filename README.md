@@ -1,5 +1,5 @@
 
-# AWS Scalable Infra : ALB + SSM Maintenance + CloudWatch
+# AWS Scalable Infrastructure : ALB + SSM Maintenance + CloudWatch
 <br/>
 <br/>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<img width="107" height="60" alt="Amazon-Web-Services-AWS-Logo" src="https://github.com/user-attachments/assets/f7829385-3361-48fc-8099-849da5534de5" />
@@ -14,7 +14,7 @@
 - [Deployment Steps](#5-deployment-steps)
 - [Usage & Maintenance](#6-usage--maintenance)
 - [Alerts & Monitoring](#7-alerts--monitoring)
-- [Improvements & Next Steps](#8-improvements--next-steps)
+- [Improvements & Next Steps](#9-improvements--next-steps)
 - [Conclusion](#9-conclusion)
 - [References](#10-references)
 <br/>
@@ -32,20 +32,21 @@ La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM),
 ## 2. Design Decisions   
 <a name="#2-design-decisions"></a>
 ### <ins>Terraform</ins>
-&emsp;&emsp;L'utilisation d'Infrastructure as Code permet de versionner et reproduire facilement l’environnement, créer des modules réutilisables, déployer de manière automatisée en respectant les bonnes pratiques cloud et détruire l'infrastructure en une seule commande lorsqu'elle n'est plus nécessaire afin de respecter un budget.    
+&emsp;&emsp;L'utilisation d' IaC (Infrastructure as Code) permet de versionner et reproduire facilement l’environnement, créer des modules réutilisables, déployer de manière automatisée en respectant les bonnes pratiques cloud et détruire l'infrastructure en une seule commande lorsqu'elle n'est plus nécessaire afin de respecter un budget.    
 
 ### <ins>2 subnets privés pour l’ASG</ins>
-&emsp;&emsp;Ce choix permet de garantir la haute disponibilité et la résilience de l’application en cas de panne d’une AZ. Cela s’aligne sur les bonnes pratiques AWS pour les architectures critiques.
+&emsp;&emsp;Ce choix permet de garantir la haute disponibilité et la résilience de l’application en cas de panne d’une AZ (Availability Zone). Cela s’aligne sur les bonnes pratiques AWS pour les architectures critiques.
 
 ### <ins>VPC Endpoint S3 plutôt qu’une NAT Gateway (coût et besoin limité d’accès Internet)</ins> 
-&emsp;&emsp;Les instances EC2 sont déployées dans des subnets privés et n’ont pas besoin d’un accès Internet permanent.    
-Plutôt que de créer une NAT Gateway (qui génère des coûts supplémentaires), un VPC Endpoint S3 a été utilisé pour permettre le bootstrap et l’accès aux artefacts stockés dans S3 de manière sécurisée et privée.  
-Cette solution est à la fois économique et conforme aux bonnes pratiques de sécurité AWS pour les environnements privés.  
+&emsp;&emsp;Les instances EC2 sont déployées dans des subnets privés pour gagner en sécurité et n’ont pas besoin d’un accès Internet permanent.    
+Plutôt que de créer une NAT Gateway qui génère des coûts supplémentaires, un VPC Endpoint S3 a été utilisé pour permettre le bootstrap des instances en ayant accès aux fichiers nécessaires stockés dans S3 de manière sécurisée et privée.  
+Cette solution est économique car on utilise ici un endpoint de type "Gateway" qui n'engendre aucun frais.
+Aussi, le traffic entre les deux services est sécurisé car il est d'office crypté via HTTPS.  
   
 ### <ins>Session Manager pour ajouter de la securité en fermant le port SSH</ins>
 &emsp;&emsp;Pour limiter l’exposition des instances, le port SSH 22 reste fermé.  
-L’accès est géré via AWS Systems Manager Session Manager, ce qui permet d’effectuer la maintenance et le debug directement depuis la console ou l’interface CLI, sans ouvrir de ports réseau.  
-Ce choix renforce la sécurité et simplifie la gestion des accès tout en restant compatible avec les meilleures pratiques de gouvernance AWS.  
+Leur accès est géré via AWS Systems Manager Session Manager, ce qui permet d’effectuer la maintenance et le debug directement depuis la console ou l’interface CLI, sans ouvrir de ports réseau.  
+Ce choix renforce donc la sécurité et simplifie la gestion des accès car il suffit de quelques clics pour accéder aux instances tout en ayant un contrôle aisé sur les comptes ayant la permission de se connecter avec.
   
 ### <ins>Alarme CloudWatch unique pour simplifier la démonstration</ins>
 &emsp;&emsp;Pour ce projet, une seule alarme CloudWatch a été créée sur le compteur d’erreurs 4XX.  
@@ -174,8 +175,8 @@ resource "aws_vpc_endpoint" "ssm" {
 ## 4. Features
 <a name="#4-features"></a>    
 - **Scalabilité** : auto scaling des instances EC2 en fonction des besoins.
-- **Haute disponibilité** : Les instances de l’ASG sont déployées sur deux subnets privés dans des Availability Zones différentes, assurant la résilience et la continuité du service. 
-- **Sécurité** : aucune exposition SSH, maintenance uniquement via SSM Session Manager.   
+- **Haute disponibilité** : Les instances de l’ASG sont déployées sur deux subnets privés dans des AZs différentes, assurant la résilience et la continuité du service. 
+- **Sécurité** : instances dans un réseau privé, aucune exposition SSH, maintenance uniquement via SSM Session Manager accessible via VPC endpoint.
 - **Monitoring** : alarme CloudWatch pour erreurs 4XX.
 - **Reproductibilité et automatisation** : déploiement automatisé et reproductible via Terraform.   
 - **Optimisation** : instances privées avec accès S3 via un vpc endpoint pour charger les fichiers de configuration au boot.
@@ -298,14 +299,21 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 ```
 </details>
 
-6. Lancer la commande *terraform init* pour initialiser les modules. Puis, *terraform plan* pour vérifier ce qui va être créé et enfin *terraform apply* pour déployer l'infrastructure.
+6. Lancer la commande *terraform init* pour initialiser les modules.
+
+7. Lancer la commande *terraform plan* pour vérifier ce qui va être créé. Votre adresse mail sera demandée dans la console pour y permettre l'envoi d'alarmes sécurité.
+
+8. Accepter l'abonnement aux alarmes sécurité dans sa boîte mail.
+
+9. Lancer la commande*terraform apply* et confirmer son adresse mail dans la console.
+L'infrastructure se déploie.
    
-7. Vérifier le fonctionnement :
+10. Vérifier le fonctionnement :
 - Accès applicatif via ALB.
 - Connexion maintenance via SSM.
 - Déclenchement de l’alarme en cas d’erreurs 4XX.
 
-8. Si besoin, détruire l'infrastructure avec la commande "*terraform destroy*.
+11. Si besoin, détruire l'infrastructure avec la commande "*terraform destroy*.
 <br/>
 <br/>
 
@@ -324,19 +332,21 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 ## 7. Alerts & Monitoring
 <a name="#7-alerts--monitoring"></a>
 - Alarme principale : Target_4XXCount déclenche une notification email via SNS si un seuil est dépassé.
-- Extensions possibles :   
-- Ajout d’alertes sur les 5XX errors.   
-- Suivi de la latence des requêtes.   
-- Création de dashboards personnalisés dans CloudWatch.   
+- Extensions d'alarmes possibles :
+    - "PacketsRejected" pour détecter le traffic bloqué au niveau des Security Groups. Cela équivaut aux tentatives d'intrusion et scans de ports ouverts.
+    - "erreurs 5xx" pour détecter les attaque DDoS et les pannes de serveur.
+    - "unauthorized access" pour détecter les tentatives d'accès IAM non autorisées.
 <br/>
 <br/>
 <br/>
 
-## 8. Improvements & Next Steps
-<a name="#8-improvements--next-steps"></a>
+## 8. Pricing
+
+## 9. Improvements & Next Steps
+<a name="#9-improvements--next-steps"></a>
 - Ajouter un WAF (Web Application Firewall) pour renforcer la sécurité.
 - Configurer l’ALB en HTTPS avec un certificat ACM.
-- Étendre le monitoring (logs applicatifs, métriques supplémentaires).   
+- Étendre le monitoring (logs applicatifs, métriques supplémentaires, création de dashboard personnalisés).   
 <br/>
 <br/>
 <br/>
