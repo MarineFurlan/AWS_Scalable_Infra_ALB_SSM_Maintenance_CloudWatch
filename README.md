@@ -173,11 +173,26 @@ resource "aws_vpc_endpoint" "ssm" {
 ## 4. Features
 <a name="#4-features"></a>    
 - **Scalabilité** : auto scaling des instances EC2 en fonction des besoins.
-- **Haute disponibilité** : Les instances de l’ASG sont déployées sur deux subnets privés dans des AZs différentes, assurant la résilience et la continuité du service. 
-- **Sécurité** : instances dans un réseau privé, aucune exposition SSH, maintenance uniquement via SSM Session Manager accessible via VPC endpoint.
-- **Monitoring** : alarme CloudWatch pour erreurs 4XX.
-- **Reproductibilité et automatisation** : déploiement automatisé et reproductible via Terraform.   
-- **Optimisation** : instances privées avec accès S3 via un vpc endpoint pour charger les fichiers de configuration au boot.
+  
+<br/>
+
+- **_Haute disponibilité_** : Les instances de l’ASG sont déployées sur deux subnets privés dans des AZs différentes, assurant la résilience et la continuité du service.
+  
+<br/> 
+
+- **_Sécurité_** : instances dans un réseau privé, aucune exposition SSH, maintenance uniquement via SSM Session Manager accessible via VPC endpoint.
+  
+<br/>
+
+- **_Monitoring_** : alarme CloudWatch pour erreurs 4XX.
+
+<br/>
+
+- **_Reproductibilité et automatisation_** : déploiement automatisé et reproductible via Terraform.
+
+<br/>  
+
+- **_Optimisation_** : instances privées avec accès S3 via un vpc endpoint pour charger les fichiers de configuration au boot et réduire les coûts.
 
 <br/>
 <br/>
