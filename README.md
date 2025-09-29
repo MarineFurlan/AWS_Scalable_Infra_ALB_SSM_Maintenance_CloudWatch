@@ -346,15 +346,17 @@ L'infrastructure se déploie.
 &emsp;&emsp;L’infrastructure a été pensée avec une approche coût/efficacité, afin de concilier bonnes pratiques AWS et optimisation budgétaire.  
 L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://calculator.aws) et les pages officielles de tarification des services.  
 
-| Service                     | Choix effectué                   | Estimation mensuelle* | Justification |
+| Service                      | Choix effectué                   | Estimation mensuelle*  | Justification |
 |------------------------------|----------------------------------|------------------------|---------------|
-| **EC2 (Auto Scaling Group)** | 2 instances t3.micro (on-demand) | ~15–20 USD             | Taille minimale pour démonstration ; autoscaling permet d’ajuster la capacité si besoin. |
-| **Application Load Balancer**| 1 ALB actif                      | ~18–20 USD             | Requis pour gérer le routage HTTP vers plusieurs instances. |
+| **EC2 (Auto Scaling Group)** | 2 instances t2.micro en EC2 Instance Savings Plan (1an) | ~13,43 USD             | Taille minimale pour démonstration ; autoscaling permet d’ajuster la capacité si besoin. Famille d'instance stable.  L’Instance Savings Plan offre jusqu’à ~72% de réduction pour un usage continu, parfaitement adapté à un ASG derrière un ALB.|
+| **Application Load Balancer**| 1 ALB actif                      | ~19.32 USD             | Requis pour gérer le routage HTTP vers plusieurs instances. |
 | **VPC Endpoint (S3)**        | 1 Gateway Endpoint               | ~0 USD                 | Gratuit à l’usage, contrairement à une NAT Gateway (~32 USD/mois + data). |
+| **VPC Endpoint (SSM)**       | 3 Interface Endpoint (ssm, ec2messages, ssmmessages) x 2 AZs           | ~48.18 USD                 | Permet la maintenance des instances privées via SSM Connect/Session Manager sans Internet.
+| **NAT Gateway**              | 1 NAT x 2 AZs                    | ~73 USD                
 | **CloudWatch**               | 1 alarme + métriques de base     | ~1 USD                 | Gratuit pour la plupart des métriques par défaut ; faible coût ajouté pour l’alarme. |
-| **SSM Session Manager**      | Inclus dans Free Tier            | ~0 USD                 | Pas de coût additionnel pour l’accès basique via Session Manager. |
+| **SSM Session Manager**      | Inclus dans Free Tier            | ~0 USD                 | Pas de coût additionnel pour l’accès basique via Session Manager sans logging vers CloudWatch. |
 
-\* Les montants sont donnés à titre indicatif et peuvent varier selon la région et l’usage réel.  
+\* Les montants sont donnés à titre indicatif pour la région "eu-west-3" et n'inclus que les coûts fixes des services sans les coûts liés au traffic.
 
 ### Décisions budgétaires clés
 - **VPC Endpoint S3 vs NAT Gateway** → choix du VPC Endpoint pour réduire les coûts tout en permettant aux instances privées d’accéder à S3.  
