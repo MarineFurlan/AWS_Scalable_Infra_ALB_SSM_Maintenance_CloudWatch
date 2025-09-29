@@ -324,8 +324,8 @@ L'infrastructure se déploie.
 ![target_group](https://github.com/user-attachments/assets/bb84eb3c-3889-4f49-965b-982eb7f66e7c)
 **Connexion maintenance via SSM :**
 - Se connecter à l'instance via SSM Connect
-![ssm_connect](https://github.com/user-attachments/assets/4e9ccc12-1d90-455a-aa07-677879aa940b)
 ![Instance_Connect](https://github.com/user-attachments/assets/a197d9f6-d28e-4cc1-b6f2-9cf9003fa789)
+![ssm_connect](https://github.com/user-attachments/assets/4e9ccc12-1d90-455a-aa07-677879aa940b)
 - Déclenchement de l’alarme en cas d’erreurs 4XX.
 
 11. Si besoin, détruire l'infrastructure avec la commande "*terraform destroy*.
