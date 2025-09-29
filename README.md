@@ -360,12 +360,12 @@ L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://cal
 
 ### Décisions budgétaires clés
 <br/>
-<br/>
+
 | Service                      | Choix effectué                   | Estimation mensuelle*  |
 |------------------------------|----------------------------------|------------------------|
 | _NAT Gateway_                | _1 NAT x 2 AZs_                  | _~73 USD_              |
 
-\ 
+<br/>
 
 - **Session Manager vs NAT Gateway** : Coûts fixes réduits de 24,82 USD/mois  
 - **VPC Endpoint to S3 vs NAT Gateway** : same  
