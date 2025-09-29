@@ -324,6 +324,10 @@ L'infrastructure se déploie.
 
 &emsp;&emsp;Après vérification dans la console AWS de la concordance des ressources créées en rapport à l'infrastructure souhaitée, les tests suivants peuvent être effectués :
 
+<br/>
+
+<br/>
+
 ### _Accès applicatif via ALB_
 
 - Copier l'adresse du ALB dans la sortie outputs de la console et y accéder sur navigateur.
