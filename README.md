@@ -30,26 +30,19 @@ La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM),
 ## 2. Design Decisions   
 <a name="#2-design-decisions"></a>
 ### <ins>Terraform</ins>
-&emsp;&emsp;L'utilisation d' IaC (Infrastructure as Code) permet de versionner et reproduire facilement l’environnement, créer des modules réutilisables, déployer de manière automatisée en respectant les bonnes pratiques cloud et détruire l'infrastructure en une seule commande lorsqu'elle n'est plus nécessaire afin de respecter un budget.    
+L’utilisation d’IaC garantit la reproductibilité, le versionnement et l’automatisation des déploiements. L’infrastructure peut être déployée ou détruite en une seule commande, optimisant coûts et agilité.     
 
 ### <ins>2 subnets privés pour l’ASG</ins>
-&emsp;&emsp;Ce choix permet de garantir la haute disponibilité et la résilience de l’application en cas de panne d’une AZ (Availability Zone). Cela s’aligne sur les bonnes pratiques AWS pour les architectures critiques.
+Ce choix permet de garantir la haute disponibilité et la résilience de l’application en cas de panne d’une AZ (Availability Zone).  
 
 ### <ins>VPC Endpoint S3 plutôt qu’une NAT Gateway (coût et besoin limité d’accès Internet)</ins> 
-&emsp;&emsp;Les instances EC2 sont déployées dans des subnets privés pour gagner en sécurité et n’ont pas besoin d’un accès Internet permanent.    
-Plutôt que de créer une NAT Gateway qui génère des coûts supplémentaires, un VPC Endpoint S3 a été utilisé pour permettre le bootstrap des instances en ayant accès aux fichiers nécessaires stockés dans S3 de manière sécurisée et privée.  
-Cette solution est économique car on utilise ici un endpoint de type "Gateway" qui n'engendre aucun frais.
-Aussi, le traffic entre les deux services est sécurisé car il est d'office crypté via HTTPS.  
+Les instances privées n’ont pas besoin d’un accès Internet permanent. Un endpoint S3, gratuit et sécurisé, suffit pour le bootstrap et évite les coûts élevés d’une NAT Gateway.  
   
 ### <ins>Session Manager pour ajouter de la securité en fermant le port SSH</ins>
-&emsp;&emsp;Pour limiter l’exposition des instances, le port SSH 22 reste fermé.  
-Leur accès est géré via AWS Systems Manager Session Manager, ce qui permet d’effectuer la maintenance et le debug directement depuis la console ou l’interface CLI, sans ouvrir de ports réseau.  
-Ce choix renforce donc la sécurité et simplifie la gestion des accès car il suffit de quelques clics pour accéder aux instances tout en ayant un contrôle aisé sur les comptes ayant la permission de se connecter avec.
+Le port 22 reste fermé. L’accès aux instances se fait via Systems Manager, renforçant la sécurité et simplifiant la gestion des accès.
   
 ### <ins>Alarme CloudWatch unique pour simplifier la démonstration</ins>
-&emsp;&emsp;Pour ce projet, une seule alarme CloudWatch a été créée sur le compteur d’erreurs 4XX.  
-L’objectif est de démontrer le mécanisme de monitoring et de notification sans complexifier le déploiement ni augmenter les coûts.  
-Cette approche permet de montrer la logique de création et de gestion des alarmes, tout en restant extensible et reproductible pour d’autres métriques ou besoins futurs. 
+Une seule alarme sur les erreurs 4XX illustre le monitoring et la notification tout en limitant la complexité et le budget.  
 <br/>
 <br/>
 <br/>
