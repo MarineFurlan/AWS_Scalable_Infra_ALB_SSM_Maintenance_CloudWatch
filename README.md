@@ -311,11 +311,11 @@ L'infrastructure se déploie.
     
 ![Email_notif](https://github.com/user-attachments/assets/df101df1-d6b3-4f3d-9888-5a7e0b9f3934)
    
-### _Tests_
+### <ins>Tests</ins>
 
 10. Après vérification dans la console AWS de la concordance des ressources créées en rapport à l'infrastructure souhaitée nous pouvons faire les tests suivants :
 
-### Accès applicatif via ALB :
+### _Accès applicatif via ALB_
 
 - Copier l'adresse du ALB dans la sortie outputs de la console et y accéder sur navigateur.
 
@@ -334,13 +334,13 @@ L'infrastructure se déploie.
 
 ![target_group](https://github.com/user-attachments/assets/bb84eb3c-3889-4f49-965b-982eb7f66e7c)
 
-### Connexion maintenance via SSM : 
+### _Connexion maintenance via SSM_
 
 - Se connecter à l'instance via SSM Connect
 
 ![ssm_connect](https://github.com/user-attachments/assets/4e9ccc12-1d90-455a-aa07-677879aa940b) 
 
-## Resiliency in case of failure
+### _Resiliency in case of failure_
 
 - Stopper une instance afin de simuler un problème de zone.
 <img width="769" height="665" alt="Capture d'écran 2025-09-29 153219" src="https://github.com/user-attachments/assets/af1ad7ab-ec5f-4ec5-9a60-c0aad01abbba" />
@@ -360,7 +360,7 @@ Dorénavant, le refresh de la page affichera le texte associée à la nouvelle i
 
 
 
-### Déclenchement de l’alarme en cas d’erreurs 4XX : 
+### _Déclenchement de l’alarme en cas d’erreurs 4XX_
 
 - Dans Amazon SNS > Rubriques > vpc_alerts_webApp : Verifier l'abonnement email afin de recevoir les alertes.
 
