@@ -352,8 +352,8 @@ L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://cal
 | **Application Load Balancer**| 1 ALB actif                      | ~19.32 USD             | Requis pour gérer le routage HTTP vers plusieurs instances. |
 | **VPC Endpoint (S3)**        | 1 Gateway Endpoint               | ~0 USD                 | Gratuit à l’usage, contrairement à une NAT Gateway (~32 USD/mois + data). |
 | **VPC Endpoint (SSM)**       | 3 Interface Endpoint (ssm, ec2messages, ssmmessages) x 2 AZs           | ~48.18 USD                 | Permet la maintenance des instances privées via SSM Connect/Session Manager sans Internet.
-| **NAT Gateway**              | 1 NAT x 2 AZs                    | ~73 USD                
-| **CloudWatch**               | 1 alarme + métriques de base     | ~1 USD                 | Gratuit pour la plupart des métriques par défaut ; faible coût ajouté pour l’alarme. |
+| <ins>NAT Gateway</ins>              | <ins>1 NAT x 2 AZs</ins>                    | <ins>~73 USD</ins>                
+| **CloudWatch**               | 1 alarme + métriques de base     | ~1 USD                 | Gratuit dans la limite du Free Tier étant de 10 métriques et 10 alarmes/mois + 5Go logs ingérés/mois. La configuration actuelle s'inscrit donc dans le FreeTier même en ajoutant des logs pour stocker les informations de chaque session de maintenance étant généralement inférieures à 50Mo/mois|
 | **SSM Session Manager**      | Inclus dans Free Tier            | ~0 USD                 | Pas de coût additionnel pour l’accès basique via Session Manager sans logging vers CloudWatch. |
 
 \* Les montants sont donnés à titre indicatif pour la région "eu-west-3" et n'inclus que les coûts fixes des services sans les coûts liés au traffic.
