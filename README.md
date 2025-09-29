@@ -413,7 +413,13 @@ L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://cal
 
 \* Les montants sont donnés à titre indicatif pour la région "eu-west-3" et n'inclus que les coûts fixes des services sans les coûts liés au traffic.
 
-### Décisions budgétaires clés
+<br/> 
+
+<br/> 
+
+<br/> 
+
+### <ins>Décisions budgétaires clés</ins>
 <br/>
 
 | Service                      | Choix effectué                   | Estimation mensuelle*  |
@@ -422,8 +428,14 @@ L’estimation ci-dessous est basée sur la [AWS Pricing Calculator](https://cal
 
 <br/>
 
-- **Session Manager vs NAT Gateway** : Coûts fixes réduits de 24,82 USD/mois  
-- **VPC Endpoint to S3 vs NAT Gateway** : same  
+- **Session Manager vs NAT Gateway** : Coûts fixes réduits de 24,82 USD/mois
+
+<br/> 
+
+- **VPC Endpoint to S3 vs NAT Gateway** : same
+
+<br/> 
+
 - **EC2 Instance Savings Plans vs Compute Savings Plan** : Le scaling de l'infrastructure est horizontal, le type des instances n'a donc pas vocation a être modifié. Le VPC est dans une région unique. Le EC2 Instance Savings Plan propose un discount lorsque les instances utilisées sont de la même famille et situées dans la même région, il est donc plus adpaté à l'infrastructure créée. Aussi pour un engagement sur 1 an, son coût est de 6,72 USD/mois/instance contre 7,74 USD/mois/instance pour le Compute Savings Plans. L'économie est donc de 1,02 USD/mois/instance soit ~2,05 USD/mois pour cette infrastructure.  
 <br/> 
 <br/>
