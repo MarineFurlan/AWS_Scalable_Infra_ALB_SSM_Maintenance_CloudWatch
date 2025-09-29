@@ -458,4 +458,9 @@ Plusieurs options sont envisageables pour faire évoluer l'infrastructure, dont 
 :link:[AWS Systems Manager (SSM) – AWS Docs](https://docs.aws.amazon.com/systems-manager/)  
 :link:[Amazon CloudWatch Monitoring – AWS Docs](https://docs.aws.amazon.com/cloudwatch/)  
 :link:[AWS Pricing Calculator](https://calculator.aws/#/)  
-
+:link:[AWS Free Tier](https://aws.amazon.com/free)  
+:link:[EC2 Pricing](https://aws.amazon.com/ec2/pricing/)  
+:link:[Application Load Balancer Pricing](https://aws.amazon.com/elasticloadbalancing/pricing/)  
+:link:[VPC Endpoint Pricing](https://aws.amazon.com/privatelink/pricing/)  
+:link:[CloudWatch Pricing](https://aws.amazon.com/cloudwatch/pricing/)  
+:link:[AWS Systems Manager Pricing](https://aws.amazon.com/systems-manager/pricing/)
