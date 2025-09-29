@@ -344,10 +344,14 @@ L'infrastructure se déploie.
 
 <br/>
 
+<br/>
+
 ### _Connexion maintenance via SSM_
 
 - Vérifier si la connection via SSM Connect est permise.
 <img width="1776" height="498" alt="ssm_connect" src="https://github.com/user-attachments/assets/9100b977-c117-46f3-a782-3a042fd2b21f" />
+
+<br/>
 
 <br/>
 
@@ -366,6 +370,8 @@ Après quelques temps, l'instance est drainée pour finalement être remplacée 
 Dorénavant, le serveur peut basculer sur la nouvelle instance.
 <img width="776" height="82" alt="new_instance_ip" src="https://github.com/user-attachments/assets/c9bba3d2-5dd7-48fc-9e42-2597cae48f04" />
 <img width="776" height="82" alt="Third_instance_in_server" src="https://github.com/user-attachments/assets/b5d1790e-8665-441a-b0ef-428eb9b632af" />
+
+<br/>
 
 <br/>
 
