@@ -23,6 +23,8 @@ resource "aws_security_group" "alb" {
   tags = { Name = "${var.name}-alb-tg" }
 }
 
+
+
 ### === APPLICATION LOAD BALANCER === ###
 // Attached to the security group above
 resource "aws_lb" "this" {
@@ -34,6 +36,8 @@ resource "aws_lb" "this" {
 
   tags = { Name = "${var.name}-alb-tg" }
 }
+
+
 
 ### === ALB LISTENER === ###
 /* What kind of incoming traffic the ALB will distributes
@@ -48,6 +52,8 @@ resource "aws_lb_listener" "alb" {                            // Distributes HTT
     target_group_arn = aws_lb_target_group.alb.arn
   }
 }
+
+
 
 ### === TARGET GROUP === ###
 /* Defines the group of instances that will receive the
