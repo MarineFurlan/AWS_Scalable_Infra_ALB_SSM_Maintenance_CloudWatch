@@ -53,9 +53,7 @@ module "cloudwatch" {
 
   alb_arn_suffix = module.alb.alb_arn_suffix
   name           = var.name
-  log_group_name = "/aws/${var.name}/vpc_flowlogs"
   email_address  = var.email_address                         // Sends alerts to this email
-  vpc_id         = module.vpc.vpc_id
 }
 
 ### === SESSION MANAGER CONNECT === ###
