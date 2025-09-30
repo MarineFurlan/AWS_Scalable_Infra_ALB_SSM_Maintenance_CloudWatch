@@ -21,28 +21,28 @@
 
 ## 1. Introduction 
 <a name="#1-introduction"></a>     
-&emsp;&emsp;Ce projet présente une architecture scalable, sécurisée et monitorée sur AWS.         
-Il s'agit de déployer une application web derrière un Application Load Balancer (ALB) dans un VPC privé, avec un Auto Scaling Group d’instances EC2.   
-La maintenance et la connectivité sont assurées via AWS Systems Manager (SSM), sans accès SSH direct, et la supervision est centralisée avec CloudWatch (métriques et alertes).  
+&emsp;&emsp;This project showcases a scalable and monitored architecture on AWS.         
+It deploys a web application behind an Application Load Balancer (ALB) in a private VPC, using an Auto Scaling Group of EC2 instances.   
+Maintenance and connectivity are handled via AWS Systems Manager (SSM), without direct SSH access, and monitoring is centralized with CloudWatch (metrics and alerts).
 <br/>
 <br/>
 
 ## 2. Design Decisions   
 <a name="#2-design-decisions"></a>
 ### <ins>Terraform</ins>
-L’utilisation d’IaC garantit la reproductibilité, le versionnement et l’automatisation des déploiements. L’infrastructure peut être déployée ou détruite en une seule commande, optimisant coûts et agilité.     
+Using IaC ensures reproducibility, version control, and automated deployments. The infrastructure can be deployed or destroyed with a single command, optimizing costs and agility.     
 
-### <ins>2 subnets privés pour l’ASG</ins>
-Ce choix permet de garantir la haute disponibilité et la résilience de l’application en cas de panne d’une AZ (Availability Zone).  
+### <ins>2 Private Subnets for the ASG</ins>
+This guarantees high availability and resilience in case of an AZ (Availability Zone) failure.  
 
-### <ins>VPC Endpoint S3 plutôt qu’une NAT Gateway (coût et besoin limité d’accès Internet)</ins> 
-Les instances privées n’ont pas besoin d’un accès Internet permanent. Un endpoint S3, gratuit et sécurisé, suffit pour le bootstrap et évite les coûts élevés d’une NAT Gateway.  
+### <ins>VPC Endpoint S3 instead of a NAT Gateway (cost and limited internet needs)</ins> 
+Private instances do not require constant internet access. A free and secure S3 endpoint is sufficient for bootstrap and avoids the high costs of a NAT Gateway.  
   
-### <ins>Session Manager pour ajouter de la securité en fermant le port SSH</ins>
-Le port 22 reste fermé. L’accès aux instances se fait via Systems Manager, renforçant la sécurité et simplifiant la gestion des accès.
+### <ins>Session Manager to enhance security by keeping SSH closed</ins>
+Port 22 remains closed. Access to instances is done through Systems Manager, strengthening security and simplifying access management.
   
-### <ins>Alarme CloudWatch unique pour simplifier la démonstration</ins>
-Une seule alarme sur les erreurs 4XX illustre le monitoring et la notification tout en limitant la complexité et le budget.  
+### <ins>Single CloudWatch Alarm for simplicity</ins>
+One alarm on 4XX errors demonstrates monitoring and notification while keeping complexity and costs low. 
 <br/>
 <br/>
 <br/>
@@ -51,9 +51,9 @@ Une seule alarme sur les erreurs 4XX illustre le monitoring et la notification t
 <a name="#3-architecture-overview"></a>      
 <img width="2028" height="1049" alt="WebApp_EmailAlarm_SSMConnect drawio(1)" src="https://github.com/user-attachments/assets/7dbff49e-2482-492d-9902-2619b60d88c5" />   
       
-### Composants principaux : 
+### Main Components: 
    
-:open_file_folder:[ALB (Application Load Balancer)](./modules/alb/main.tf) : routage du trafic
+:open_file_folder:[ALB (Application Load Balancer)](./modules/alb/main.tf) : traffic routing
 <details>
   
 <summary>See ALB code</summary>
@@ -115,13 +115,13 @@ resource "aws_lb_listener" "alb" {
 ```
  </details> 
  
-:open_file_folder:[EC2 Auto Scaling Group](./modules/asg/main.tf) : ajustement automatique du nombre d’instances selon la charge.   
+:open_file_folder:[EC2 Auto Scaling Group](./modules/asg/main.tf): automatically adjusts the number of instances based on load.   
    
-:open_file_folder:[Private Subnets](./modules/vpc/main.tf) : instances isolées du trafic direct Internet.   
+:open_file_folder:[Private Subnets](./modules/vpc/main.tf): instances isolated from direct internet traffic.   
    
-:open_file_folder:[VPC Endpoints](./modules/vpc_endpoints/main.tf) : connectivité privée pour accéder à S3 (bootstrap) et SSM (maintenance).   
+:open_file_folder:[VPC Endpoints](./modules/vpc_endpoints/main.tf): private connectivity to S3 (bootstrap) and SSM (maintenance).   
 > [!NOTE]
-> Pour comprendre le choix d’utiliser ces deux VPC endpoints plutôt qu'une NAT Gateway ou une connexion en SSH, voir la section (voir [Design Decisions](#2-design-decisions)). 
+> For the reasoning behind using VPC endpoints instead of a NAT Gateway or SSH, see [Design Decisions](#2-design-decisions). 
 
 <details>
   
@@ -158,7 +158,7 @@ resource "aws_vpc_endpoint" "ssm" {
 ```
 </details>
 
-:open_file_folder:[CloudWatch Monitoring](./modules/cloudwatch/main.tf) : suivi des métriques et configuration d’alarmes (erreurs 4XX).
+:open_file_folder:[CloudWatch Monitoring](./modules/cloudwatch/main.tf): tracks metrics and configures alarms (4XX errors).
 <br/>
 <br/>
 <br/>
@@ -168,27 +168,27 @@ resource "aws_vpc_endpoint" "ssm" {
 
 <br/>
 
-- **_Scalabilité_** : auto scaling des instances EC2 en fonction des besoins.
+- **_Scalability_**: EC2 instances auto scale based on demand.
   
 <br/>
 
-- **_Haute disponibilité_** : Les instances de l’ASG sont déployées sur deux subnets privés dans des AZs différentes, assurant la résilience et la continuité du service.
+- **_High Availability_**: ASG instances are deployed across two private subnets in different AZs, ensuring resilience and service continuity.
   
 <br/> 
 
-- **_Sécurité_** : instances dans un réseau privé, aucune exposition SSH, maintenance uniquement via SSM Session Manager accessible via VPC endpoint.
+- **_Security_**: instances in a private network, no SSH exposure, maintenance only via SSM Session Manager through VPC endpoint.
   
 <br/>
 
-- **_Monitoring_** : alarme CloudWatch pour erreurs 4XX.
+- **_Monitoring_**: CloudWatch alarm for 4XX errors.
 
 <br/>
 
-- **_Reproductibilité et automatisation_** : déploiement automatisé et reproductible via Terraform.
+- **_Reproducibility and Automation_**: automated and reproducible deployments with Terraform.
 
 <br/>  
 
-- **_Optimisation_** : instances privées avec accès S3 via un vpc endpoint pour charger les fichiers de configuration au boot et réduire les coûts.
+- **_Optimization_**: private instances access S3 via VPC endpoint for configuration files at boot, reducing costs.
 
 <br/>
 <br/>
@@ -196,20 +196,21 @@ resource "aws_vpc_endpoint" "ssm" {
 
 ## 5. Deployment Steps
 <a name="#5-deployment-steps"></a>
-&emsp;&emsp;L’infrastructure est déployée avec Terraform, permettant un déploiement rapide, répétable, automatisé et versionné.  
-Voici les étapes principales pour reproduire l’environnement :  
-### <ins>Prérequis :</ins>
-   
-- Compte AWS actif.   
-- AWS CLI configurée.   
-- Terraform   
-  
-### <ins>Étapes de déploiement :</ins>   
+&emsp;&emsp;The infrastructure is deployed with Terraform, enabling fast, repeatable, automated, and version-controlled deployments.  
+Here are the main steps to reproduce the environment:  
 
-1. Ecrire le [VPC](./modules/vpc/main.tf) avec subnets publics et privés.
-2. Ecrire les [VPC endpoints](./modules/vpc_endpoints/main.tf) SSM et S3.
-3. Ecrire l’[Application Load Balancer (ALB)](./modules/alb/main.tf).
-4. Ecrire l'[Auto Scaling Group](./modules/asg/main.tf) d’instances EC2 dans les subnets privés.
+### <ins>Prerequisites:</ins>
+- Active AWS account.   
+- AWS CLI configured.   
+- Terraform installed.   
+  
+### <ins>Deployment Steps:</ins>   
+
+1. Write the [VPC](./modules/vpc/main.tf) with public and private subnets.  
+2. Write the [VPC endpoints](./modules/vpc_endpoints/main.tf) for SSM and S3.  
+3. Write the [Application Load Balancer (ALB)](./modules/alb/main.tf).  
+4. Write the [Auto Scaling Group](./modules/asg/main.tf) of EC2 instances in the private subnets.  
+
 <details>
   
 <summary>See asg code</summary>
@@ -287,7 +288,7 @@ resource "aws_launch_template" "webApp" {
 ```
 </details>
 
-5. Ecrire la [CloudWatch Alarm](./modules/cloudwatch/main.tf) sur Target_4XXCount.
+5. Write the [CloudWatch Alarm](./modules/cloudwatch/main.tf) on Target_4XXCount.  
 <details>
   
 <summary>See alarm code</summary>
@@ -309,39 +310,37 @@ resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
 ```
 </details>
 
-6. Lancer la commande *terraform init* pour initialiser les modules.
+6. Run *terraform init* to initialize the modules.
+   
+7. Run *terraform plan* to review what will be created. Enter the requested email in the console to enable alert notifications.
 
-7. Lancer la commande *terraform plan* pour vérifier ce qui va être créé. Entrer l'adresse mail demandée dans la console pour y permettre l'envoi d'alarmes sécurité.
+8. Run *terraform apply* and confirm the email address in the console. The infrastructure is deployed.
 
-8. Lancer la commande *terraform apply* et confirmer l'adresse mail dans la console.
-L'infrastructure se déploie.
-
-9. Accepter l'abonnement aux alarmes sécurité dans sa boîte mail.
+9. Confirm the subscription to security alerts in your email inbox. 
     
 ![Email_notif](https://github.com/user-attachments/assets/df101df1-d6b3-4f3d-9888-5a7e0b9f3934)
    
 ### <ins>Tests</ins>
 
-&emsp;&emsp;Après vérification dans la console AWS de la concordance des ressources créées en rapport à l'infrastructure souhaitée, les tests suivants peuvent être effectués :
-
+&emsp;&emsp;After verifying in the AWS console that the created resources match the intended infrastructure, the following tests can be performed:  
 <br/>
 
-### _Accès applicatif via ALB_
+### _Application Access via ALB_
 
-- Copier l'adresse du ALB dans la sortie outputs de la console et y accéder sur navigateur.
+- Copy the ALB DNS address from the outputs and access it in a browser.  
 
 ![dns_output](https://github.com/user-attachments/assets/905eece7-aba0-4811-a524-35eb39e3ff18)
   
-- Si la connexion est établie, la page affichera "Hello from {current-instance}" et sur plusieurs refresh de la page, le serveur basculera de l'instance 1 à 2.
+- If successful, the page will display "Hello from {current-instance}". Refreshing multiple times will show the load balancing across instances.
 
 <img width="776" height="82" alt="First_instance_in_server" src="https://github.com/user-attachments/assets/b6ce9de0-f6ba-44b8-aec8-e854bf093089" />
 <img width="776" height="82" alt="Second_instance_in_server" src="https://github.com/user-attachments/assets/4bc10bc6-3aed-4ce4-b3cb-2cf701de04a3" />
 
-- Dans les screenshots ci-dessous, on peut observer quelle instance possède quelle IP pour mieux les identifier :
+- Screenshots below show how to identify which instance has which IP:
 <img width="776" height="82" alt="First_instance_ip" src="https://github.com/user-attachments/assets/5316ee90-05e6-409e-b3bf-d8b3353c7116" />
 <img width="776" height="82" alt="Second_instance_ip" src="https://github.com/user-attachments/assets/0438c297-6f23-4363-be60-181b15186cf0" />
 
-- Dans la console AWS, le target group contenant les instances les montrera saines et présentes dans des AZs différentes :
+- In the AWS console, the target group will show healthy instances across different AZs:
 <img width="832" height="791" alt="target_group" src="https://github.com/user-attachments/assets/4418ea7a-f2bb-4194-a283-3faef77cdd63" />
 
 <br/>
@@ -350,9 +349,10 @@ L'infrastructure se déploie.
 
 <br/>
 
-### _Connexion maintenance via SSM_
 
-- Vérifier si la connection via SSM Connect est permise.
+### _Maintenance Connection via SSM_
+
+- Check that SSM Connect access is available. 
 <img width="1776" height="498" alt="ssm_connect" src="https://github.com/user-attachments/assets/9100b977-c117-46f3-a782-3a042fd2b21f" />  
 
 <br/>
@@ -363,17 +363,16 @@ L'infrastructure se déploie.
 
 ### _Resiliency in case of failure_
 
-- Stopper une instance afin de simuler un problème de zone.  
-Immédiatement, dans la section Target Group de la console AWS on peut observer la mise à jour de l'instance en "unhealthy", tandis que le serveur ne pointe plus que vers l'instance restante.
+- Stop one instance to simulate an AZ issue. The target group will immediately mark it as unhealthy, and traffic will shift to the remaining instance.
 <img width="776" height="82" alt="Stopped_instance" src="https://github.com/user-attachments/assets/6ddd16cb-dac6-415f-9133-3e40adca58ed" />
 
 
-Après quelques temps, l'instance est drainée pour finalement être remplacée par une nouvelle.
+- After some time, the unhealthy instance is drained and replaced by a new one.
 <img width="776" height="82" alt="Draining_instance" src="https://github.com/user-attachments/assets/4d3f13a2-279f-4571-84b7-c09ac1662cf3" />
 <img width="776" height="82" alt="New_instance_booted" src="https://github.com/user-attachments/assets/9bf8858f-2737-42ae-8ac5-684167405cf2" />
 
 
-Dorénavant, le serveur peut basculer sur la nouvelle instance.
+- Traffic can now be routed to the new instance.
 <img width="776" height="82" alt="new_instance_ip" src="https://github.com/user-attachments/assets/c9bba3d2-5dd7-48fc-9e42-2597cae48f04" />
 <img width="776" height="82" alt="Third_instance_in_server" src="https://github.com/user-attachments/assets/b5d1790e-8665-441a-b0ef-428eb9b632af" />
 
@@ -381,86 +380,79 @@ Dorénavant, le serveur peut basculer sur la nouvelle instance.
 
 <br/>  
 
-### _Déclenchement de l’alarme en cas d’erreurs 4XX_
+### _Triggering the Alarm on 4XX Errors_
 
-- Dans Amazon SNS > Rubriques > vpc_alerts_webApp : Verifier l'abonnement email afin de recevoir les alertes.
+- In Amazon SNS > Topics > vpc_alerts_webApp: verify the email subscription to receive alerts.
 
 <img width="776" height="82" alt="Email_confirmed" src="https://github.com/user-attachments/assets/e4dafef2-5bf2-423c-a8e9-51cef8ceb3cf" />
 
-- Simulate 4xx errors to trigger alarm with, for instance, this code in PowerShell :
+- Simulate 4xx errors with, for instance, this PowerShell snippet:
 
 ```PowerShell
 1..12 | ForEach-Object { try { Invoke-WebRequest "http://{alb_dns}/chemin-invalide$($_)?r=$(Get-Random)" -Method GET -ErrorAction Stop -TimeoutSec 5 | Out-Null; "200" } catch { if ($_.Exception.Response) { $_.Exception.Response.StatusCode.value__ } else { "ERR" } } }
 ```
 
-After 4 to 5 minutes, the email alert is now received
+After 4–5 minutes, the email alert is received:  
 
 ![email_alarm](https://github.com/user-attachments/assets/95abb978-4a51-48a7-aa14-5ed9e17a5ad8)
 
 
 
 
-11. Si besoin, détruire l'infrastructure avec la commande "*terraform destroy*.
+11. If needed, destroy the infrastructure with *terraform destroy*.
 <br/>
 <br/>
 
 ## 6. Pricing
 <a name="#6-pricing"></a>
-&emsp;&emsp;L’infrastructure a été pensée avec une approche coût/efficacité afin de concilier bonnes pratiques AWS et optimisation budgétaire.  
-L’estimation ci-dessous est basée sur l' [AWS Pricing Calculator](https://calculator.aws).
+&emsp;&emsp;The infrastructure was designed with a cost-efficiency approach, balancing AWS best practices with budget optimization.  
+The estimate below is based on the [AWS Pricing Calculator](https://calculator.aws).  
 
-| Service                      | Choix effectué                   | Estimation mensuelle*  | Justification |
-|------------------------------|----------------------------------|------------------------|---------------|
-| **EC2 (Auto Scaling Group)** | 2 instances t2.micro en EC2 Instance Savings Plan (1an)   | ~13,43 USD             | Famille d'instance stable. 1 seule région. ~2.05 USD d'économies par rapport à un Compute Savings Plan.
-| **Application Load Balancer**| 1 ALB actif                      | 19.32 USD             | Requis pour gérer le routage HTTP vers plusieurs instances. |
-| **VPC Endpoint (S3)**        | 1 Gateway Endpoint               | 0 USD                 | Gratuit à l’usage contrairement à une NAT Gateway |
-| **VPC Endpoint (SSM)**       | 3 Interface Endpoint (ssm, ec2messages, ssmmessages) x 2 AZs           | 48.18 USD                 | Plus de securité et d'économies car 24,82 USD/mois moins cher qu'une NAT Gateway.             
-| **CloudWatch**               | 1 alarme + métriques de base     | 0 USD                 | Gratuit dans la limite du Free Tier étant de 10 métriques et 10 alarmes/mois + 5Go logs ingérés/mois. La configuration actuelle s'inscrit donc dans le FreeTier même en ajoutant des logs pour stocker les informations de chaque session de maintenance étant généralement inférieures à 50Mo/mois|
-| **SSM Session Manager**      | Inclus dans Free Tier            | 0 USD                 | Pas de coût additionnel pour l’accès basique via Session Manager sans logging vers CloudWatch. |
-| **TOTAL**                    |                                  | **67,8 USD**         
+| Service                      | Selected Option                   | Estimated Monthly*  | Justification |
+|------------------------------|----------------------------------|---------------------|---------------|
+| **EC2 (Auto Scaling Group)** | 2 t2.micro instances with EC2 Instance Savings Plan (1 year) | ~13.43 USD           | Stable instance family. Single region. ~2.05 USD/month cheaper than Compute Savings Plan. |
+| **Application Load Balancer**| 1 active ALB                      | 19.32 USD           | Required for traffic routing across multiple instances. |
+| **VPC Endpoint (S3)**        | 1 Gateway Endpoint                | 0 USD               | Free to use, unlike a NAT Gateway. |
+| **VPC Endpoint (SSM)**       | 3 Interface Endpoints (ssm, ec2messages, ssmmessages) x 2 AZs | 48.18 USD           | More secure and ~24.82 USD/month cheaper than a NAT Gateway. |
+| **CloudWatch**               | 1 alarm + basic metrics           | 0 USD               | Free within Free Tier (10 metrics + 10 alarms/month + 5GB logs). Current setup stays within Free Tier. |
+| **SSM Session Manager**      | Included in Free Tier             | 0 USD               | No additional cost for basic access without CloudWatch logging. |
+| **TOTAL**                    |                                  | **67.8 USD**        |
 
-\* Les montants sont donnés à titre indicatif pour la région "eu-west-3" et n'inclus que les coûts fixes des services sans les coûts liés au traffic.
+\* Costs estimated for region "eu-west-3". Includes fixed service costs only, not traffic-related costs.  
 
-<br/> 
+<br/>  
 
-<br/> 
+### <ins>Key Budget Decisions</ins>
 
-<br/> 
+| Service                      | Alternative Option                | Estimated Monthly*  |
+|------------------------------|----------------------------------|---------------------|
+| _NAT Gateway_                | _1 NAT x 2 AZs_                   | _73 USD_           |
 
-### <ins>Décisions budgétaires clés</ins>
-<br/>
+- **VPC endpoints vs NAT Gateway**:  
+24.82 USD/month fixed cost savings.  
 
-| Service                      | Choix effectué                   | Estimation mensuelle*  |
-|------------------------------|----------------------------------|------------------------|
-| _NAT Gateway_                | _1 NAT x 2 AZs_                  | _73 USD_              |
-
-<br/>
-
-- **VPC endpoints vs NAT Gateway** :  
-Coûts fixes réduits de 24,82 USD/mois
-
-<br/> 
-
-- **EC2 Instance Savings Plans vs Compute Savings Plan** :  
-&emsp;&emsp;Le scaling de l'infrastructure est horizontal, le type des instances n'a donc pas vocation a être modifié et le VPC est dans une région unique. Le "EC2 Instance Savings Plan" propose un discount lorsque les instances utilisées sont de la même famille et situées dans la même région, il est donc plus adpaté à l'infrastructure créée.  
-Aussi, pour un engagement d'1 an, son coût est de 6,72 USD/mois/instance contre 7,74 USD/mois/instance pour le "Compute Savings Plans".  
-L'économie est donc de 1,02 USD/mois/instance soit ~2,05 USD/mois pour cette infrastructure.  
+- **EC2 Instance Savings Plans vs Compute Savings Plan**:  
+Since the scaling is horizontal, the instance type is not expected to change, and the VPC is confined to one region. The "EC2 Instance Savings Plan" is more suitable, offering discounts for consistent instance family and region.  
+For a 1-year commitment:  
+  - EC2 Instance Savings Plan = 6.72 USD/month/instance  
+  - Compute Savings Plan = 7.74 USD/month/instance  
+Savings = 1.02 USD/month/instance, i.e., ~2.05 USD/month for this infrastructure.  
 <br/> 
 <br/>
 <br/>
 
 ## 7. Improvements & Next Steps
 <a name="#7-improvements--next-steps"></a>
-Plusieurs options sont envisageables pour faire évoluer l'infrastructure, dont :  
-- **Intégrer un WAF (Web Application Firewall)** pour renforcer la protection contre les attaques et élargir le champ de surveillance.
+Potential enhancements to the infrastructure include:  
+- **Integrating a WAF (Web Application Firewall)** to strengthen protection against attacks and extend monitoring scope.  
 
 <br/>
 
-- Configurer l’ALB en **HTTPS avec un certificat ACM** afin de chiffrer le trafic et encore augmenter la sécurité.  
+- Configuring the ALB with **HTTPS and an ACM certificate** and **Automating HTTP-to-HTTPS redirection** to encrypt traffic and improve security.  
 
 <br/>
 
-- **Étendre le monitoring** (logs applicatifs, métriques supplémentaires, création de dashboard personnalisés) pour mieux anticiper les problèmes et mieux suivre l'utilisation de l'application.  
+- **Extending monitoring** (application logs, additional metrics, custom dashboards) to better anticipate issues and track application usage. 
 <br/>
 <br/>
 <br/>
