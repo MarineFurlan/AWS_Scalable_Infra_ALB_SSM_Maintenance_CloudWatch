@@ -6,15 +6,15 @@ resource "aws_security_group" "alb" {
   name        = "${var.name}-alb-tg"
   description = "Allow HTTP traffic from internet"
 
-  ingress {                                                   // allows any client having the alb's dns name to
-    from_port = 80                                            // connect to the server over the internet.
+  ingress {                                                   // allows any client having the alb's dns name to connect to the server over the internet.
+    from_port = 80
     to_port   = 80
     protocol  = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  egress {                                                    // No restrictions : security groups are stateful so what
-    from_port = 0                                             // enters can leave.
+  egress {                                                    // No restrictions : security groups are stateful so what enters can leave.
+    from_port = 0
     to_port   = 0
     protocol  = "-1"
     cidr_blocks = ["0.0.0.0/0"]
@@ -60,12 +60,12 @@ resource "aws_lb_target_group" "alb" {
 
   health_check {                                              // Ensures only healthy EC2s receive traffic
     path                = "/"
-    interval            = 10                                  // All those parameters are quite low to ensure a fast
-    timeout             = 5                                   // detection of unhealthy instances.
-    unhealthy_threshold = 2                                   // Doing so it avoids 5xx errors when instances shut down.
+    interval            = 10                                  // All those parameters are quite low to ensure a fast detection of unhealthy instances. It avoids 5xx errors when instances shut down.
+    timeout             = 5
+    unhealthy_threshold = 2
     healthy_threshold   = 2
     matcher             = "200-399"                           // Acceptable HTTP status codes
   }
 
-  deregistration_delay = 60                                   // Instances end their connections before being removed
-}                                                             // Avoids routing to instances in shutdown.
+  deregistration_delay = 60                                   // Instances end their connections before being removed : Avoids routing to instances in shutdown.
+}
