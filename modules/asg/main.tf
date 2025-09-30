@@ -66,12 +66,12 @@ resource "aws_autoscaling_policy" "alb_request_target" {
 
   target_tracking_configuration {
     predefined_metric_specification {
-      predefined_metric_type = "ALBRequestCountPerTarget"                   // AWS-recommended metric with "TargetTrackingScaling". Best suited for a web application when tons of requests are forwarded.
+      predefined_metric_type = "ALBRequestCountPerTarget"                   // AWS-recommended metric with "TargetTrackingScaling". Best suited for a web application when a lot of requests are forwarded.
       resource_label         = "${var.alb_arn_suffix}/${var.tg_arn_suffix}" // Also, ALBs do not necessarily distributes traffic equally so another metric like "CPUUtilization" would not be adequate.
     }
 
-    target_value     = 100.0                                               // Scale to keep ~100 requests per instance
-    disable_scale_in = false                                               // Allow removing instances when traffic decreases.
+    target_value     = 100.0                                               // Scales to keep ~100 requests per instance
+    disable_scale_in = false                                               // Allows removing instances when traffic decreases.
   }
 }
 
@@ -102,7 +102,7 @@ resource "aws_launch_template" "webApp" {
 
   network_interfaces {
     associate_public_ip_address = false                                     // Instances are private
-    security_groups = [aws_security_group.webApp.id]                        // Attach SG defined above
+    security_groups = [aws_security_group.webApp.id]                        // Attaches SG defined above
   }
 
   lifecycle {
