@@ -6,7 +6,7 @@
 &emsp;<img width="75" height="86" alt="Terraform-Logo" src="https://github.com/user-attachments/assets/b037706b-3866-4376-9b2d-55c91b6dafc0" />
 
 
-## Summary
+## Summary 
 - [Introduction](#1-introduction)
 - [Design Decisions](#2-design-decisions)
 - [Architecture Overview](#3-architecture-overview)
