@@ -51,9 +51,20 @@ One alarm on 4XX errors demonstrates monitoring and notification while keeping c
 <a name="#3-architecture-overview"></a>     
 <img width="2028" height="1049" alt="WebApp_EmailAlarm_SSMConnect drawio(1)" src="https://github.com/user-attachments/assets/c53acb03-e611-4e65-b860-e8c4baada7e8" />
 
-      
-### Main Components: 
+<br/>
+<br/>     
    
+| Components         | AWS Service                   | Role                           | 
+|-------------------|-------------------------------|--------------------------------|
+| **Network**       | VPC, Availability Zones, subnets, Internet GateWay, VPC endpoint | Segmentation, High Availability, Internet access     |
+| **Compute**       | EC2 instances                 | Workload execution             | 
+| **Security**      | Security groups               | Access control and protection  | 
+| **Observability** | Cloudwatch, SNS               | Monitoring and alerting        |                       
+| **Managment**     | SSM Manager, S3               | Web server maintenance         |
+
+<br/>
+
+<!--
 :open_file_folder:[ALB (Application Load Balancer)](./modules/alb/main.tf) : traffic routing
 <details>
   
@@ -163,7 +174,7 @@ resource "aws_vpc_endpoint" "ssm" {
 <br/>
 <br/>
 <br/>
-
+-->
 ## 4. Features
 <a name="#4-features"></a>   
 
