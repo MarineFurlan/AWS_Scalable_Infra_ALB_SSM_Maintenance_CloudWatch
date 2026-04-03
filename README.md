@@ -21,9 +21,8 @@
 
 ## 1. Introduction 
 <a name="#1-introduction"></a>     
-&emsp;&emsp;This project showcases a scalable and monitored architecture on AWS.         
-It deploys a web application behind an Application Load Balancer (ALB) in a private VPC, using an Auto Scaling Group of EC2 instances.   
-Maintenance and connectivity are handled via AWS Systems Manager (SSM), without direct SSH access, and monitoring is centralized with CloudWatch (metrics and alerts).
+&emsp;&emsp;This project demonstrates how to securely host and monitor a private web server on AWS using an Application Load Balancer and EC2 instances in private subnets.\
+Access to the instances is managed through Systems Manager (SSM) without exposing SSH. CloudWatch is used to track metrics and trigger alerts for abnormal traffic such as HTTP 4XX errors.
 <br/>
 <br/>
 
