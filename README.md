@@ -11,11 +11,10 @@
 - [Introduction](#1-introduction)
 - [Design Decisions](#2-design-decisions)
 - [Architecture Overview](#3-architecture-overview)
-- [Features](#4-features)
-- [Deployment](#5-deployment)
-- [Pricing](#6-pricing)
-- [Improvements & Next Steps](#7-improvements--next-steps)
-- [References](#8-references)
+- [Deployment](#4-deployment)
+- [Pricing](#5-pricing)
+- [Improvements & Next Steps](#6-improvements--next-steps)
+- [References](#7-references)
 <br/>
 <br/>
 <br/>
@@ -58,157 +57,17 @@ One alarm on 4XX errors demonstrates monitoring and notification while keeping c
 | Components         | AWS Service                   | Role                           | 
 |-------------------|-------------------------------|--------------------------------|
 | **Network**       | VPC, Availability Zones, subnets, Internet GateWay, VPC endpoint | Segmentation, High Availability, Internet access     |
-| **Compute**       | EC2 instances                 | Workload execution             | 
-| **Security**      | Security groups               | Access control and protection  | 
+| **Compute**       | EC2 instances, Auto Scaling Group                 | Workload execution             | 
+| **Security**      | Security groups, SSM Manager               | Access control and protection  | 
 | **Observability** | Cloudwatch, SNS               | Monitoring and alerting        |                       
 | **Managment**     | SSM Manager, S3               | Web server maintenance         |
 
 <br/>
-
-<!--
-:open_file_folder:[ALB (Application Load Balancer)](./modules/alb/main.tf) : traffic routing
-<details>
-  
-<summary>See ALB code</summary>
-  
-```terraform
-resource "aws_lb" "this" {
-  name               = "${var.name}-alb"
-  subnets            = var.public_subnets_ids
-  internal           = false
-  load_balancer_type = "application"
-  security_groups = [aws_security_group.alb.id]
-
-  tags = { Name = "${var.name}-alb-tg" }
-}
-```
-
-</details>
-
-<details>
-  
-<summary>See target group code</summary>
-
-```terraform
-resource "aws_lb_target_group" "alb" {
-  name     = "${var.name}-tg"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
-
-  health_check {
-    path                = "/"
-    interval            = 10
-    timeout             = 5
-    unhealthy_threshold = 2
-    healthy_threshold   = 2
-    matcher             = "200-399"
-  }
-
-  deregistration_delay = 60
-}
-```
-</details>
-
-<details>
-  
-<summary>See listener code</summary>
-
-```terraform
-resource "aws_lb_listener" "alb" {
-  load_balancer_arn = aws_lb.this.arn
-  port              = 80
-  protocol          = "HTTP"
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.alb.arn
-  }
-}
-```
- </details> 
- 
-:open_file_folder:[EC2 Auto Scaling Group](./modules/asg/main.tf): automatically adjusts the number of instances based on load.   
-   
-:open_file_folder:[Private Subnets](./modules/vpc/main.tf): instances isolated from direct internet traffic.   
-   
-:open_file_folder:[VPC Endpoints](./modules/vpc_endpoints/main.tf): private connectivity to S3 (bootstrap) and SSM (maintenance).   
-> [!NOTE]
-> For the reasoning behind using VPC endpoints instead of a NAT Gateway or SSH, see [Design Decisions](#2-design-decisions). 
-
-<details>
-  
-<summary>See VPC endpoint for s3 code</summary>
-
-```terraform
-resource "aws_vpc_endpoint" "s3" {
-  service_name      = "com.amazonaws.${var.region}.s3"
-  vpc_endpoint_type = "Gateway"
-  vpc_id            = var.vpc_id
-
-  route_table_ids = var.private_rt_id
-
-  tags = { Name = "${var.name}-s3-endpoint" }
-}
-```
-</details>
-
-<details>
-  
-<summary>See VPC endpoint for ssm code</summary>
-
-```terraform
-resource "aws_vpc_endpoint" "ssm" {
-  service_name        = "com.amazonaws.${var.region}.ssm"
-  vpc_endpoint_type   = "Interface"
-  vpc_id              = var.vpc_id
-  subnet_ids          = var.private_subnets_ids
-  security_group_ids = [aws_security_group.endpoints.id]
-  private_dns_enabled = true
-
-  tags = { Name = "${var.name}-ssm-endpoint" }
-}
-```
-</details>
-
-:open_file_folder:[CloudWatch Monitoring](./modules/cloudwatch/main.tf): tracks metrics and configures alarms (4XX errors).
-<br/>
-<br/>
-<br/>
--->
-## 4. Features
-<a name="#4-features"></a>   
-
-<br/>
-
-- **_Scalability_**: EC2 instances auto scale based on demand.
-  
-<br/>
-
-- **_High Availability_**: ASG instances are deployed across two private subnets in different AZs, ensuring resilience and service continuity.
-  
-<br/> 
-
-- **_Security_**: instances in a private network, no SSH exposure, maintenance only via SSM Session Manager through VPC endpoint.
-  
-<br/>
-
-- **_Monitoring_**: CloudWatch alarm for 4XX errors.
-
-<br/>
-
-- **_Reproducibility and Automation_**: automated and reproducible deployments with Terraform.
-
-<br/>  
-
-- **_Optimization_**: private instances access S3 via VPC endpoint for configuration files at boot, reducing costs.
-
-<br/>
 <br/>
 <br/>
 
-## 5. Deployment
-<a name="#5-deployment"></a>
+## 4. Deployment
+<a name="#4-deployment"></a>
 
 <br/>
 
@@ -218,7 +77,7 @@ resource "aws_vpc_endpoint" "ssm" {
 - Terraform installed.   
 
 <br/>
-  
+
 ### Step 1 - Clone this repo  
 
 ```bash
@@ -329,8 +188,8 @@ After 4–5 minutes, the email alert is received:
 <br/>
 <br/>
 
-## 6. Pricing
-<a name="#6-pricing"></a>
+## 5. Pricing
+<a name="#5-pricing"></a>
 &emsp;&emsp;The infrastructure was designed with a cost-efficiency approach, balancing AWS best practices with budget optimization.  
 The estimate below is based on the [AWS Pricing Calculator](https://calculator.aws).  
 
@@ -367,8 +226,8 @@ Savings = 1.02 USD/month/instance, i.e., ~2.05 USD/month for this infrastructure
 <br/>
 <br/>
 
-## 7. Improvements & Next Steps
-<a name="#7-improvements--next-steps"></a>
+## 6. Improvements & Next Steps
+<a name="#6-improvements--next-steps"></a>
 Potential enhancements to the infrastructure include:  
 - **Integrating a WAF (Web Application Firewall)** to strengthen protection against attacks and extend monitoring scope.  
 
@@ -383,8 +242,8 @@ Potential enhancements to the infrastructure include:
 <br/>
 <br/>
 
-## 8. References
-<a name="#8-references"></a>   
+## 7. References
+<a name="#7-references"></a>   
 :link:[Application Load Balancer – AWS Docs](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html)  
 :link:[Auto Scaling Groups – AWS Docs](https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-groups.html)  
 :link:[PrivateLinks – AWS Docs](https://docs.aws.amazon.com/vpc/latest/privatelink/concepts.html)  
