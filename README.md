@@ -1,5 +1,6 @@
 
 # Secure and monitor a private web server - ALB + SSM + CloudWatch
+**Status :** 🟠 Work in progress
 <br/>
 <br/>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<img width="107" height="60" alt="Amazon-Web-Services-AWS-Logo" src="https://github.com/user-attachments/assets/f7829385-3361-48fc-8099-849da5534de5" />
@@ -11,7 +12,7 @@
 - [Design Decisions](#2-design-decisions)
 - [Architecture Overview](#3-architecture-overview)
 - [Features](#4-features)
-- [Deployment Steps](#5-deployment-steps)
+- [Deployment](#5-deployment)
 - [Pricing](#6-pricing)
 - [Improvements & Next Steps](#7-improvements--next-steps)
 - [References](#8-references)
@@ -206,133 +207,46 @@ resource "aws_vpc_endpoint" "ssm" {
 <br/>
 <br/>
 
-## 5. Deployment Steps
-<a name="#5-deployment-steps"></a>
-&emsp;&emsp;The infrastructure is deployed with Terraform, enabling fast, repeatable, automated, and version-controlled deployments.  
-Here are the main steps to reproduce the environment:  
+## 5. Deployment
+<a name="#5-deployment"></a>
+
+<br/>
 
 ### <ins>Prerequisites:</ins>
 - Active AWS account.   
 - AWS CLI configured.   
 - Terraform installed.   
+
+<br/>
   
-### <ins>Deployment Steps:</ins>   
+### Step 1 - Clone this repo  
 
-1. Write the [VPC](./modules/vpc/main.tf) with public and private subnets.  
-2. Write the [VPC endpoints](./modules/vpc_endpoints/main.tf) for SSM and S3.  
-3. Write the [Application Load Balancer (ALB)](./modules/alb/main.tf).  
-4. Write the [Auto Scaling Group](./modules/asg/main.tf) of EC2 instances in the private subnets.  
-
-<details>
-  
-<summary>See asg code</summary>
-
-```terraform
-resource "aws_autoscaling_group" "this" {
-  name = "${var.name}-asg"
-
-  min_size            = var.min_capacity
-  max_size            = var.max_capacity
-  desired_capacity    = var.desired_capacity
-  vpc_zone_identifier = var.private_subnets_ids
-
-  launch_template {
-    id      = aws_launch_template.webApp.id
-    version = "$Latest"
-  }
-
-  target_group_arns = [var.tg_arn]
-  health_check_type         = "ELB"
-  health_check_grace_period = 30
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  tag {
-    key                 = "Name"
-    value               = "${var.name}-asg"
-    propagate_at_launch = true
-  }
-
-}
+```bash
+git clone https://github.com/MarineFurlan/AWS_Scalable_Infra_ALB_SSM_Maintenance_CloudWatch.git
+cd AWS_Scalable_Infra_ALB_SSM_Maintenance_CloudWatch
 ```
-</details>
+<br/>
 
-<details>
-  
-<summary>See launch template code</summary>
+### Step 2 - Initialize the infrastructure
+```bash
+terraform init
+terraform plan
+terraform apply
+```  
 
-```terraform
-
-resource "aws_launch_template" "webApp" {
-  name_prefix   = "${var.name}-lt"
-  image_id      = var.ami
-  instance_type = var.instance_type
-
-  iam_instance_profile {
-    name = var.instance_profile_name
-  }
-
-  user_data = base64encode(<<-EOF
-              #!/bin/bash
-              dnf update -y
-              dnf install -y httpd
-              systemctl start httpd
-              systemctl enable httpd
-
-              INSTANCE_ID = $(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-
-
-              echo "<h1>Hello from $(hostname -f)</h1>" > /var/www/html/index.html
-              EOF
-  )
-
-  network_interfaces {
-    associate_public_ip_address = false
-    security_groups = [aws_security_group.webApp.id]
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-```
-</details>
-
-5. Write the [CloudWatch Alarm](./modules/cloudwatch/main.tf) on Target_4XXCount.  
-<details>
-  
-<summary>See alarm code</summary>
-
-```terraform
-resource "aws_cloudwatch_metric_alarm" "alb_4xx_alarm" {
-  alarm_name          = "${var.name}-ALB-4xx-alarm"
-  alarm_description   = "Alarm when ALB returns too many 4XX responses"
-  metric_name         = "HTTPCode_Target_4XX_Count"
-  namespace           = "AWS/ApplicationELB"
-  evaluation_periods  = 1
-  period              = 60
-  statistic           = "Sum"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  threshold           = 10
-  dimensions = { LoadBalancer = var.alb_arn_suffix }
-  alarm_actions = [aws_sns_topic.alerts.arn]
-}
-```
-</details>
-
-6. Run *terraform init* to initialize the modules.
-   
-7. Run *terraform plan* to review what will be created. Enter the requested email in the console to enable alert notifications.
-
-8. Run *terraform apply* and confirm the email address in the console. The infrastructure is deployed.
-
-9. Confirm the subscription to security alerts in your email inbox. 
+### Step 3 - Confirm the subscription to security alerts in your email inbox. 
     
 ![Email_notif](https://github.com/user-attachments/assets/df101df1-d6b3-4f3d-9888-5a7e0b9f3934)
-   
-### <ins>Tests</ins>
+
+<!--- ### Step 4 - Deployment validation
+```bash
+# Commande pour vérifier que tout fonctionne
+aws cloudformation describe-stacks --stack-name $PROJECT_NAME --query "Stacks[0].StackStatus"
+# Résultat attendu : "CREATE_COMPLETE"
+```
+-->
+
+## 5. Results
 
 &emsp;&emsp;After verifying in the AWS console that the created resources match the intended infrastructure, the following tests can be performed:  
 <br/>
