@@ -97,27 +97,60 @@ terraform init
 terraform plan
 terraform apply
 ```  
+```terraform
+# Expected result in CLI
+
+Apply complete! Resources: 31 added, 0 changed, 0 destroyed.                                                                                                                                                                        
+
+Outputs:                                                                                                                                                                                                                            
+
+alb_arn_suffix = "app/webApp-alb/XXXXXXXXX"
+alb_dns = "webApp-alb-XXXXXXXXX.eu-west-3.elb.amazonaws.com"
+asg_name = "webApp-ec2-sg"
+cloudwatch_alarm_name = "webApp-ALB-4xx-alarm"
+ec2_security_group_id = "sg-XXXXXXXXX"
+sns_topic_arn = "arn:aws:sns:eu-west-3:XXXXXXXXX:vpc_alerts_webApp"
+target_group_arn = "arn:aws:elasticloadbalancing:eu-west-3:XXXXXXXXX:targetgroup/webApp-tg/XXXXXXXXX"
+```
+<br/>
 
 ### Step 3 - Confirm the subscription to security alerts in your email inbox.
 
-![Email_notif](https://github.com/user-attachments/assets/df101df1-d6b3-4f3d-9888-5a7e0b9f3934)
-
-<!--- ### Step 4 - Deployment validation
 ```bash
-# Commande pour vérifier que tout fonctionne
-aws cloudformation describe-stacks --stack-name $PROJECT_NAME --query "Stacks[0].StackStatus"
-# Résultat attendu : "CREATE_COMPLETE"
+# Store the SNS topic arn in a variable
+SNS_TOPIC_ARN=$(terraform output -raw sns_topic_arn)
+
+# Is our email subscribed to the SNS topic ?
+aws sns list-subscriptions-by-topic --topic-arn $SNS_TOPIC_ARN \
+  --query 'Subscriptions[0].SubscriptionArn' --output text
 ```
--->
+```bash
+# Expected Result
+PendingConfirmation # If not subscribed
+$SNS_TOPIC_ARN:XXXXXXXXX # If subscribed
+```
+<br/>
 
 ### Step 4 - Deployment validation
-#### _Application Access via ALB_
 
+#### _ALB access_
 ```bash
-curl http://[alb_dns]
+# Store ALB dns in a variable
+ALB_DNS=$(terraform output -raw alb_dns)
+
+# Display alb address
+echo "ALB endpoint : http://$ALB_DNS"
 ```
-Expected result :
 ```bash
+#Expected results
+ALB endpoint : http://webApp-alb-XXXXXXXXX.eu-west-3.elb.amazonaws.com
+```
+```bash
+# Can we access the webserver through the ALB ?
+curl -s http://$ALB_DNS
+```
+```bash
+#Expected results
 StatusCode        : 200
 StatusDescription : OK
 Content           : <h1>Hello from [instance_ip]</h1>
@@ -126,10 +159,99 @@ Content           : <h1>Hello from [instance_ip]</h1>
 <br/>
 
 #### _Closed SSH port_
+```bash
+# Store Security group ID in a variable
+SG_ID=$(terraform output -raw ec2_security_group_id)
+
+# Is the SSH port on instances closed ?
+aws ec2 describe-security-groups --group-ids $SG_ID \
+  --query 'SecurityGroups[0].IpPermissions[?FromPort==`22`]' \
+  --output json
+  ```
+```bash
+#Expected results
+[] # If closed
+# If open
+```
+```bash
+# Confirmer que l'unique source de trafic entrant autorisée est l'ALB
+aws ec2 describe-security-groups --group-ids $SG_ID \
+  --query 'SecurityGroups[0].IpPermissions[*].{Port:FromPort,Source:UserIdGroupPairs[0].GroupId}' \
+  --output table
+ ```
+```bash
+#Expected results
+----------------------------------                                                                                                                                                                                                 
+|     DescribeSecurityGroups     |
++------+-------------------------+
+| Port |         Source          |
++------+-------------------------+
+|  80  |        [ALB-sg]         |
++------+-------------------------+
+```
+<br/>
+
 #### _SSM instance connection_
+```bash
+# List all registered instances in the SSM Fleet Manager
+aws ssm describe-instance-information \
+  --query 'InstanceInformationList[*].{ID:InstanceId,Status:PingStatus,Platform:PlatformName}' \
+  --output table
+```
+```bash
+#Expected Result
+---------------------------------------------------                                                                                                                                                                                
+|           DescribeInstanceInformation           |
++----------------------+----------------+---------+
+|          ID          |   Platform     | Status  |
++----------------------+----------------+---------+
+|  i-XXXXXXXXX         |  Amazon Linux  |  Online |
+|  i-XXXXXXXXX         |  Amazon Linux  |  Online |
++----------------------+----------------+---------+
+```
+```bash
+# Can we connect to the first instance with SSM Connect ?
+INSTANCE_ID=$(aws ssm describe-instance-information \
+  --query 'InstanceInformationList[0].InstanceId' --output text)
+  
+aws ssm start-session --target $INSTANCE_ID
+```
+```bash
+#Expected Result
+
+```
+<br/>
+
 #### _New instance created in case of AZ failure_
+```bash
+# Is there new instances created when an AZs is down ?
+```
+```bash
+#Expected Result
+...
+```
+<br/>
+
 #### _Alarm triggered_
+```bash
+# Is the Cloudwatch alarm triggered when the webserver is under attack ?
+```
+```bash
+#Expected Result
+...
+```
+<br/>
+
 #### _Email sent_
+```bash
+# Is the alarm email sent when the alarm is ON ?
+```
+```bash
+#Expected Result
+...
+```
+<br/>
+
 ## 5. Results
 
 <!--
