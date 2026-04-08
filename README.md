@@ -78,9 +78,10 @@ used to monitor incoming traffic and trigger alerts on abnormal traffic such as 
 <details>
 <summary>Prerequisites</summary>
 
-- Active AWS account.
-- AWS CLI configured.
-- Terraform installed.
+- Active AWS account
+- AWS CLI configured
+- Terraform installed
+- Session Manager Plugin installed
 </details>
 
 <br/>
