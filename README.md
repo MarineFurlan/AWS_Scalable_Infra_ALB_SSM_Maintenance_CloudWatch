@@ -237,35 +237,174 @@ sh-5.2$
 
 #### _New instance created in case of AZ failure_
 ```bash
-# Is there new instances created when an AZs is down ?
-```
-```bash
+# Store Autoscaling group name in a variable
+ASG_NAME=$(terraform output -raw asg_name)
+
+# Are our instances scattered on two availability zones ?
+aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $ASG_NAME \
+  --query 'AutoScalingGroups[0].Instances[*].{ID:InstanceId,AZ:AvailabilityZone,State:HealthStatus}' \
+  --output table
+
 #Expected Result
-...
+--------------------------------------------------                                                                                                                                                                                 
+|            DescribeAutoScalingGroups           |
++-------------+-----------------------+----------+
+|     AZ      |          ID           |  State   |
++-------------+-----------------------+----------+
+|  eu-west-3b |      i-XXXXXXXXX      |  Healthy |
+|  eu-west-3a |      i-XXXXXXXXX      |  Healthy |
++-------------+-----------------------+----------+
+
+# Suspend launches in the primary AZs (simulating a failure)
+PRIMARY_AZ="${AWS_REGION}a"
+aws autoscaling suspend-processes \
+  --auto-scaling-group-name $ASG_NAME \
+  --scaling-processes Launch
+
+aws autoscaling terminate-instance-in-auto-scaling-group \
+  --instance-id $(aws autoscaling describe-auto-scaling-groups \
+    --auto-scaling-group-names $ASG_NAME \
+    --query "AutoScalingGroups[0].Instances[?AvailabilityZone=='$PRIMARY_AZ'].InstanceId | [0]" \
+    --output text) \
+  --no-should-decrement-desired-capacity
+  
+#Expected Result
+{                                                                                                                                                                                                                                  
+    "Activity": {
+        "ActivityId": "2c9675b2-1334-c8ab-fe9d-8b0328521a4f",
+        "AutoScalingGroupName": "webApp-asg",
+        "Description": "Terminating EC2 instance: i-0fa945e4d1070942f",
+        "Cause": "At 2026-04-08T09:55:35Z instance i-0fa945e4d1070942f was taken out of service in response to a user request.",
+        "StartTime": "2026-04-08T09:55:35.858000+00:00",
+        "StatusCode": "InProgress",
+        "Progress": 0,
+        "Details": "{\"Availability Zone ID\":\"euw3-az1\",\"Subnet ID\":\"subnet-07e3076b75755ff90\",\"Availability Zone\":\"eu-west-3a\"}"
+    }
+}
+
+# Reactivate auto-launches
+aws autoscaling resume-processes \
+  --auto-scaling-group-name $ASG_NAME \
+  --scaling-processes Launch
+
+# Monitor instance replacement
+while true; do
+  aws autoscaling describe-auto-scaling-groups \
+    --auto-scaling-group-names $ASG_NAME \
+    --query 'AutoScalingGroups[0].Instances[*].{ID:InstanceId,AZ:AvailabilityZone,State:LifecycleState}' \
+    --output table
+  sleep 10
+done
+
+#Expected Result
+----------------------------------------------------                                                                                                                                                                               
+|             DescribeAutoScalingGroups            |
++------------+-----------------------+-------------+
+|     AZ     |          ID           |    State    |
++------------+-----------------------+-------------+
+| eu-west-3a |      i-YYYYYYYYY      |  InService  |
+| eu-west-3b |      i-XXXXXXXXX      |  InService  |
++------------+-----------------------+-------------+
 ```
 <br/>
 
 #### _Alarm triggered_
 ```bash
 # Is the Cloudwatch alarm triggered when the webserver is under attack ?
-```
-```bash
+# Générer un volume d'erreurs 4XX en ciblant des routes inexistantes
+ALB_DNS=$(terraform output -raw alb_dns)
+
+echo "Simulation d'attaque en cours — génération de 100 requêtes sur routes invalides..."
+for i in $(seq 1 50); do
+  curl -s -o /dev/null "http://$ALB_DNS/invalid-$RANDOM" &
+done
+echo "Requêtes envoyées."
+
+# Vérifier que les erreurs 4XX sont bien enregistrées dans les métriques ALB
+ALB_ARN_SUFFIX=$(terraform output -raw alb_arn_suffix)
+
+aws cloudwatch get-metric-statistics \
+  --namespace AWS/ApplicationELB \
+  --metric-name HTTPCode_Target_4XX_Count \
+  --dimensions Name=LoadBalancer,Value=$ALB_ARN_SUFFIX \
+  --start-time $(date -u -v-5M +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u --date='5 minutes ago' +%Y-%m-%dT%H:%M:%SZ) \
+  --end-time $(date -u +%Y-%m-%dT%H:%M:%SZ) \
+  --period 60 \
+  --statistics Sum \
+  --query 'Datapoints[*].{Time:Timestamp,Count:Sum}' \
+  --output table
+
 #Expected Result
-...
+----------------------------------------                                                                                                                                                                                           
+|          GetMetricStatistics         |
++-------+------------------------------+
+| Count |            Time              |
++-------+------------------------------+
+|  90.0 |  2026-04-08T11:32:00+00:00   |
+|  1.0  |  2026-04-08T11:31:00+00:00   |
++-------+------------------------------+
+
+# Vérifier l'état de l'alarme CloudWatch (peut prendre 1 à 2 minutes)
+ALARM_NAME=$(terraform output -raw cloudwatch_alarm_name)
+
+aws cloudwatch describe-alarms --alarm-names $ALARM_NAME \
+  --query 'MetricAlarms[0].{Name:AlarmName,State:StateValue,Reason:StateReason}' \
+  --output table
+  
+# Expected result
+----------------------------------------------------------------------------------------------------------------------------                                                                                                       
+|                                                      DescribeAlarms                                                      |
++--------+-----------------------------------------------------------------------------------------------------------------+
+|  Name  |  webApp-ALB-4xx-alarm                                                                                           |
+|  Reason|  Threshold Crossed: 1 datapoint [90.0 (08/04/26 11:32:00)] was greater than or equal to the threshold (10.0).   |
+|  State |  ALARM                                                                                                          |
++--------+-----------------------------------------------------------------------------------------------------------------+
 ```
+
 <br/>
 
 #### _Email sent_
 ```bash
 # Is the alarm email sent when the alarm is ON ?
+# Store SNS topic arn in a variable
+SNS_TOPIC_ARN=$(terraform output -raw sns_topic_arn
+
+aws cloudwatch describe-alarm-history \
+  --alarm-name $ALARM_NAME \
+  --history-item-type StateUpdate \
+  --query 'AlarmHistoryItems[*].{Time:Timestamp,Summary:HistorySummary}' \
+  --output table
 ```
 ```bash
 #Expected Result
+---------------------------------------------------------------------------------------                                                                                                                                            
+|                                DescribeAlarmHistory                                 |
++------------------------------------------------+------------------------------------+
+|                     Summary                    |               Time                 |
++------------------------------------------------+------------------------------------+
+|  Alarm updated from OK to ALARM                |  2026-04-08T11:35:05.690000+00:00  |
 ...
++------------------------------------------------+------------------------------------+                                                                                                                                            
+
+# You must receive an AWS email notifying you that the alarm has entered in an ALARM state
+
+[...]
+Alarm Details:
+- Name:                       webApp-ALB-4xx-alarm
+- Description:                Alarm when ALB returns too many 4XX responses
+- State Change:               OK -> ALARM
+- Reason for State Change:    Threshold Crossed: 1 datapoint [90.0 (08/04/26 11:32:00)] was greater than or equal to the threshold (10.0).
+[...]
+Monitored Metric:
+- MetricNamespace:                     AWS/ApplicationELB
+- MetricName:                          HTTPCode_Target_4XX_Count
+- Dimensions:                          [LoadBalancer = app/webApp-alb/XXXXXXXXX]
+[...]
+
 ```
 </details>
 
-<br/>
+
 
 ## 5. Results
 <a name="#5-results"></a>

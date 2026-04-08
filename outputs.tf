@@ -10,10 +10,6 @@ output "target_group_arn" {
   value = module.alb.tg_arn
 }
 
-/*output "instance_id" {
-  value       = module.asg
-}*/
-
 output "asg_name" {
   value = module.asg.asg_name
 }
@@ -28,4 +24,8 @@ output "cloudwatch_alarm_name" {
 
 output "alb_arn_suffix" {
   value = module.alb.alb_arn_suffix
+}
+
+output "region" {
+  value = var.region
 }
