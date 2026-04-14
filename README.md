@@ -181,8 +181,6 @@ bash tests.sh
 
 Infrastructure overview :
 
-<br/>
-
 <img width="1569" height="450" alt="Infra_overview" src="https://github.com/user-attachments/assets/fbd32ce5-41f2-4109-a3c8-515801935cfa" />
 
 <!--
