@@ -192,6 +192,8 @@ Infrastructure overview :
 ## 6. Infrastructure cleaning
 <a name="#6-infrastructure-cleaning"></a>
 
+To avoid unexpected fees, destroying the infrastructure after the completion of this lab is good practice.
+
 ```terraform
 terraform plan -destroy
 terraform destroy -auto-approve
