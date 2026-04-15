@@ -1,6 +1,9 @@
-### === SECURITY GROUP === #
+#===================================================================================================
+#                                      SECURITY GROUP
+#===================================================================================================
 /* Defines firewall rules to control inbound/outbound
 traffic to the instances.*/
+
 resource "aws_security_group" "webApp" {
   name        = "${var.name}-ec2-sg"
   vpc_id      = var.vpc_id
@@ -24,8 +27,13 @@ resource "aws_security_group" "webApp" {
 }
 
 
-### === AUTO-SCALING GROUP === ###
+
+
+#===================================================================================================
+#                                   AUTOSCALING GROUP
+#===================================================================================================
 // Ensures the correct number of EC2 instances are running.
+
 resource "aws_autoscaling_group" "this" {
   name = "${var.name}-asg"
 
@@ -56,9 +64,13 @@ resource "aws_autoscaling_group" "this" {
 }
 
 
-### === AUTO-SCALING POLICY === ###
+
+#===================================================================================================
+#                                   AUTOSCALING POLICY
+#===================================================================================================
 /* Dynamically adjusts the ASG size based on ALB request load.
 Uses target tracking on the "ALBRequestCountPerTarget" metric.*/
+
 resource "aws_autoscaling_policy" "alb_request_target" {
   autoscaling_group_name = aws_autoscaling_group.this.name
   name                   = "${var.name}-alb-requests"
@@ -76,8 +88,14 @@ resource "aws_autoscaling_policy" "alb_request_target" {
 }
 
 
-### === LAUNCH TEMPLATE === ###
+
+
+
+#===================================================================================================
+#                                   LAUNCH TEMPLATE
+#===================================================================================================
 // Defines how EC2 instances are configured at launch
+
 resource "aws_launch_template" "webApp" {
   name_prefix   = "${var.name}-lt"
   image_id      = var.ami

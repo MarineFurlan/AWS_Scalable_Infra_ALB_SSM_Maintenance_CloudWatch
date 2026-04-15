@@ -1,6 +1,9 @@
-### === SECURITY GROUP === ###
+#===================================================================================================
+#                                        SECURITY GROUP
+#===================================================================================================
 /* Defines firewall rules to control inbound/outbound
 traffic to the endpoints.*/
+
 resource "aws_security_group" "endpoints" {
   name        = "${var.name}-endpoints-sg"
   vpc_id      = var.vpc_id
@@ -24,8 +27,13 @@ resource "aws_security_group" "endpoints" {
 }
 
 
-### === S3 ENDPOINT === ###
+
+
+#===================================================================================================
+#                                        S3 ENDPOINT
+#===================================================================================================
 // Enables private access to S3 without using the internet.
+
 resource "aws_vpc_endpoint" "s3" {
   service_name      = "com.amazonaws.${var.region}.s3"
   vpc_endpoint_type = "Gateway"                                        // Gateway Endpoints are used for S3 and DynamoDB only.
@@ -37,8 +45,13 @@ resource "aws_vpc_endpoint" "s3" {
 }
 
 
-### === EC2 MESSAGES ENDPOINT === ###
+
+
+#===================================================================================================
+#                                        EC2 MESSAGE ENDPOINT
+#===================================================================================================
 // Used by SSM agent to communicate with EC2 messages service privately.
+
 resource "aws_vpc_endpoint" "ec2_messages" {
   service_name        = "com.amazonaws.${var.region}.ec2messages"
   vpc_endpoint_type   = "Interface"                                     // If the used service is not S3 or DynamoDB.
@@ -51,8 +64,13 @@ resource "aws_vpc_endpoint" "ec2_messages" {
 }
 
 
-### === SSM ENDPOINT === ###
+
+
+#===================================================================================================
+#                                          SSM ENDPOINT
+#===================================================================================================
 // Allows EC2 instances in private subnets to communicate with SSM privately.
+
 resource "aws_vpc_endpoint" "ssm" {
   service_name        = "com.amazonaws.${var.region}.ssm"
   vpc_endpoint_type   = "Interface"
@@ -65,8 +83,13 @@ resource "aws_vpc_endpoint" "ssm" {
 }
 
 
-### === SSM MESSAGES ENDPOINT === ###
+
+
+#===================================================================================================
+#                                       SSM MESSAGES ENDPOINT
+#===================================================================================================
 // Required for Session Manager
+
 resource "aws_vpc_endpoint" "ssmmessages" {
   service_name        = "com.amazonaws.${var.region}.ssmmessages"
   vpc_endpoint_type   = "Interface"

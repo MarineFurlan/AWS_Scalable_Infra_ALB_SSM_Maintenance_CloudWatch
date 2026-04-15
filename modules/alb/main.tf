@@ -1,6 +1,9 @@
-### === SECURITY GROUP === #
+#===================================================================================================
+#                                        SECURITY GROUP
+#===================================================================================================
 /* Defines firewall rules to control inbound/outbound
 traffic to the Load Balancer.*/
+
 resource "aws_security_group" "alb" {
   vpc_id      = var.vpc_id
   name        = "${var.name}-alb-tg"
@@ -24,9 +27,11 @@ resource "aws_security_group" "alb" {
 }
 
 
-
-### === APPLICATION LOAD BALANCER === ###
+#===================================================================================================
+#                                   APPLICATION LOAD BALANCER
+#===================================================================================================
 // Attached to the security group above
+
 resource "aws_lb" "this" {
   name               = "${var.name}-alb"
   subnets            = var.public_subnets_ids                 // 2 public subnets are needed for every ALB
@@ -39,9 +44,12 @@ resource "aws_lb" "this" {
 
 
 
-### === ALB LISTENER === ###
-/* What kind of incoming traffic the ALB will distributes
-to its target group.*/
+#===================================================================================================
+#                                          ALB LISTENER
+#===================================================================================================
+/* What kind of incoming traffic the ALB
+will distributes to its target group.*/
+
 resource "aws_lb_listener" "alb" {                            // Distributes HTTP traffic on port 80.
   load_balancer_arn = aws_lb.this.arn
   port              = 80
@@ -55,9 +63,12 @@ resource "aws_lb_listener" "alb" {                            // Distributes HTT
 
 
 
-### === TARGET GROUP === ###
+#===================================================================================================
+#                                          TARGET GROUP
+#===================================================================================================
 /* Defines the group of instances that will receive the
 traffic from the ALB. Also configures health checks */
+
 resource "aws_lb_target_group" "alb" {
   name     = "${var.name}-tg"
   port     = 80

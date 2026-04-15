@@ -13,7 +13,12 @@ provider "aws" {
   region = var.region
 }
 
-### === APPLICATION LOAD BALANCER === ###
+
+
+
+#===================================================================================================
+#                                APPLICATION LOAD BALANCER
+#===================================================================================================
 // Distributes incoming traffic across EC2 instances
 
 module "alb" {
@@ -24,7 +29,11 @@ module "alb" {
   vpc_id             = module.vpc.vpc_id                       // Attach ALB to the VPC
 }
 
-### === AUTO SCALING GROUP === ###
+
+
+#===================================================================================================
+#                                  AUTO SCALING GROUP
+#===================================================================================================
 // Manages EC2 instances that automatically scale in/out based on defined capacity and traffic demands.
 
 module "asg" {
@@ -39,13 +48,17 @@ module "asg" {
   min_capacity          = 2
   max_capacity          = 3
   name                  = var.name
-  private_subnets_ids   = module.vpc.private_subnets_id        // Place EC2 in private subnets (not directly exposed to internet)
+  private_subnets_ids   = module.vpc.private_subnets_id        // Place EC2s in private subnets for isolation purpose
   tg_arn                = module.alb.tg_arn                    // Target Group for ALB traffic forwarding
   tg_arn_suffix         = module.alb.tg_arn_suffix
   vpc_id                = module.vpc.vpc_id
 }
 
-### === CLOUDWATCH ALARM === ###
+
+
+#===================================================================================================
+#                                  CLOUD WATCH ALARM
+#===================================================================================================
 // Sets up monitoring, logging, and alerting. Useful for tracking health, traffic, and security events.
 
 module "cloudwatch" {
@@ -56,7 +69,11 @@ module "cloudwatch" {
   email_address  = var.email_address                         // Sends alerts to this email
 }
 
-### === SESSION MANAGER CONNECT === ###
+
+
+#===================================================================================================
+#                                SESSION MANAGER CONNECT
+#===================================================================================================
 // Provides secure management of EC2 instances without requiring SSH keys or direct internet access.
 
 module "ssm" {
@@ -66,20 +83,28 @@ module "ssm" {
   role_name = "ec2-private-ssm"                            // IAM role allowing SSM agent to connect
 }
 
-### === VIRTUAL PRIVATE CLOUD === ###
+
+
+#===================================================================================================
+#                                VIRTUAL PRIVATE CLOUD
+#===================================================================================================
 // Creates the network base with subnets and routing configuration.
 module "vpc" {
   source = "./modules/vpc"
 
-  azs = ["eu-west-3a", "eu-west-3b"]                      // 2 availibility zones for high availability
+  azs = ["eu-west-3a", "eu-west-3b"]                      // 2 availability zones for high availability
   name            = var.name
-  public_subnets  = var.public_subnets                    // 2 public subnets for ALB
-  private_subnets = var.private_subnets                   // 2 private subnets for ASG of EC2 instances
+  public_subnets  = var.public_subnets                    // 2 public subnets for ALB is mandatory
+  private_subnets = var.private_subnets                   // 2 private subnets for ASG of EC2 instances : 1 for each AZ
   vpc_cidr        = var.vpc_cidr
 }
 
-### === VPC ENDPOINTS === ###
-// Creates private connections to S3 and SSM services.
+
+
+#===================================================================================================
+#                                    VPC ENDPOINTS
+#===================================================================================================
+// Creates private and secure (https traffic) connections to S3 and SSM services.
 
 module "vpc_endpoints" {
   source = "./modules/vpc_endpoints"

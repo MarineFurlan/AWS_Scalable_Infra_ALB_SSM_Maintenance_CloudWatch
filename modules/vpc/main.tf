@@ -1,5 +1,8 @@
-### === VIRTUAL PRIVATE CLOUD === ###
+#===================================================================================================
+#                                      VIRTUAL PRIVATE CLOUD
+#===================================================================================================
 // Creates the network base with subnets and routing configuration.
+
 resource "aws_vpc" "this" {
   cidr_block = var.vpc_cidr
 
@@ -10,7 +13,11 @@ resource "aws_vpc" "this" {
 }
 
 
-### === PUBLIC SUBNETS === ###
+
+
+#===================================================================================================
+#                                          PUBLIC SUBNETS
+#===================================================================================================
 resource "aws_subnet" "public" {
   count = length(var.public_subnets)
 
@@ -25,7 +32,11 @@ resource "aws_subnet" "public" {
 }
 
 
-### === PRIVATE SUBNETS === ###
+
+
+#===================================================================================================
+#                                          PRIVATE SUBNETS
+#===================================================================================================
 resource "aws_subnet" "private" {
   count = length(var.private_subnets)
 
@@ -38,8 +49,13 @@ resource "aws_subnet" "private" {
 }
 
 
-### === INTERNET GATEWAY === ###
+
+
+#===================================================================================================
+#                                          INTERNET GATEWAY
+#===================================================================================================
 // Allow ALB to reach internet
+
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.this.id
 
@@ -47,8 +63,13 @@ resource "aws_internet_gateway" "igw" {
 }
 
 
-### === PUBLIC ROUTE TABLE === ###
+
+
+#===================================================================================================
+#                                        PUBLIC ROUTE TABLE
+#===================================================================================================
 // Routes traffic to internet gateway
+
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.this.id
 
@@ -68,8 +89,14 @@ resource "aws_route_table_association" "public" {
 }
 
 
-### === PRIVATE ROUTE TABLE === ###
+
+
+
+#===================================================================================================
+#                                        PRIVATE ROUTE TABLE
+#===================================================================================================
 // Traffic does not go to the internet but to VPC Endpoints instead
+
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.this.id
 
